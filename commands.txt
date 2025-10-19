@@ -11,9 +11,6 @@ npm run build
 
 npm run lint
 
-npx next lint > plan/error.txt
-
-npx next lint > plan/error.txt
 
 npm run build
 
@@ -21,7 +18,11 @@ npx next lint
 
 npx next lint 
 
+npx next lint > error.txt
 
+npx next lint > error1.txt
+
+npx tsc --noEmit > a.txt
 
 
 

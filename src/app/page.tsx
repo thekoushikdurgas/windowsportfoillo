@@ -1,64 +1,92 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import Desktop from '@/components/system/Desktop';
-import { useAppStore } from '@/store/appStore';
-import AboutMeApp from '@/components/apps/AboutMe/AboutMeApp';
-import FileExplorerApp from '@/components/apps/FileExplorer/FileExplorerApp';
-import SettingsApp from '@/components/apps/Settings/SettingsApp';
-import CalculatorApp from '@/components/apps/Calculator/CalculatorApp';
-import NotepadApp from '@/components/apps/Notepad/NotepadApp';
+import { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Desktop from '@/components/desktop/Desktop'
+import LoadingScreen from '@/components/LoadingScreen'
+import { useAppActions } from '@/store/appStore'
 
-export default function HomePage() {
-  const { registerApp } = useAppStore();
+// Move default icons outside component to prevent recreation
+const defaultIcons = [
+  {
+    id: 'about-me-icon',
+    appId: 'about-me',
+    position: { x: 50, y: 50 },
+    name: 'About Me',
+    icon: '👤',
+    isSelected: false,
+  },
+  {
+    id: 'file-explorer-icon',
+    appId: 'file-explorer',
+    position: { x: 150, y: 50 },
+    name: 'File Explorer',
+    icon: '📁',
+    isSelected: false,
+  },
+  {
+    id: 'calculator-icon',
+    appId: 'calculator',
+    position: { x: 250, y: 50 },
+    name: 'Calculator',
+    icon: '🧮',
+    isSelected: false,
+  },
+  {
+    id: 'notepad-icon',
+    appId: 'notepad',
+    position: { x: 350, y: 50 },
+    name: 'Notepad',
+    icon: '📝',
+    isSelected: false,
+  },
+]
+
+function Home() {
+  const [isLoading, setIsLoading] = useState(true)
+  const { addDesktopIcon } = useAppActions()
+
+  // Memoize the icon addition function
+  const addDefaultIcons = useCallback(() => {
+    defaultIcons.forEach(icon => {
+      addDesktopIcon(icon)
+    })
+  }, [addDesktopIcon])
 
   useEffect(() => {
-    // Register system apps
-    const apps = [
-      {
-        id: 'about-me',
-        name: 'About Me',
-        icon: '👤',
-        component: AboutMeApp,
-        category: 'utilities' as const,
-        description: 'Personal information and portfolio',
-      },
-      {
-        id: 'file-explorer',
-        name: 'File Explorer',
-        icon: '📁',
-        component: FileExplorerApp,
-        category: 'system' as const,
-        description: 'Browse files and folders',
-      },
-      {
-        id: 'settings',
-        name: 'Settings',
-        icon: '⚙️',
-        component: SettingsApp,
-        category: 'system' as const,
-        description: 'System settings and preferences',
-      },
-      {
-        id: 'calculator',
-        name: 'Calculator',
-        icon: '🧮',
-        component: CalculatorApp,
-        category: 'utilities' as const,
-        description: 'Basic calculator application',
-      },
-      {
-        id: 'notepad',
-        name: 'Notepad',
-        icon: '📝',
-        component: NotepadApp,
-        category: 'utilities' as const,
-        description: 'Simple text editor',
-      },
-    ];
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
 
-    apps.forEach(app => registerApp(app));
-  }, [registerApp]);
+    return () => clearTimeout(timer)
+  }, [])
 
-  return <Desktop />;
+  useEffect(() => {
+    if (!isLoading) {
+      addDefaultIcons()
+    }
+  }, [isLoading, addDefaultIcons])
+
+  return (
+    <div className="w-full h-screen overflow-hidden">
+      <AnimatePresence>
+        {isLoading ? (
+          <LoadingScreen />
+        ) : (
+          <motion.div
+            key="desktop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full h-full"
+          >
+            <Desktop />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
 }
+
+export default Home

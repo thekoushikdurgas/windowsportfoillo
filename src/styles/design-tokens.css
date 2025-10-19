@@ -1,0 +1,112 @@
+/* Windows 11 Design Tokens */
+:root {
+  /* Colors - Light Theme */
+  --windows-blue: #0078d4;
+  --windows-blue-dark: #106ebe;
+  --windows-blue-light: #deecf9;
+  --windows-gray: #f3f2f1;
+  --windows-gray-dark: #323130;
+  --windows-gray-light: #faf9f8;
+  --windows-accent: #0078d4;
+  --windows-accent-light: #deecf9;
+  --windows-surface: #ffffff;
+  --windows-surface-elevated: #ffffff;
+  --windows-text-primary: #323130;
+  --windows-text-secondary: #605e5c;
+  --windows-border: #e1dfdd;
+  --windows-taskbar: rgba(32, 32, 32, 0.8);
+  --windows-start-menu: #f3f2f1;
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 0.75rem;   /* 12px */
+  --space-lg: 1rem;      /* 16px */
+  --space-xl: 1.5rem;    /* 24px */
+  --space-2xl: 2rem;     /* 32px */
+  --space-3xl: 3rem;     /* 48px */
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+  --shadow-inner: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 250ms ease-out;
+  --transition-slow: 350ms ease-out;
+
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+/* Dark Theme */
+.dark {
+  --windows-surface: #1e1e1e;
+  --windows-surface-elevated: #2d2d30;
+  --windows-text-primary: #ffffff;
+  --windows-text-secondary: #a19f9d;
+  --windows-border: #3b3a39;
+  --windows-taskbar: rgba(0, 0, 0, 0.9);
+  --windows-start-menu: #2d2d30;
+}
+
+/* Component-specific tokens */
+.window {
+  --window-border-radius: var(--radius-md);
+  --window-shadow: var(--shadow-md);
+  --window-header-height: 2.5rem;
+}
+
+.start-menu {
+  --start-menu-border-radius: var(--radius-lg);
+  --start-menu-shadow: var(--shadow-xl);
+  --start-menu-width: 24rem;
+  --start-menu-height: 24rem;
+}
+
+.taskbar {
+  --taskbar-height: 3rem;
+  --taskbar-icon-size: 2.5rem;
+  --taskbar-icon-gap: 0.25rem;
+}
+
+.desktop-icon {
+  --desktop-icon-size: 3rem;
+  --desktop-icon-gap: 0.5rem;
+  --desktop-icon-border-radius: var(--radius-md);
+}

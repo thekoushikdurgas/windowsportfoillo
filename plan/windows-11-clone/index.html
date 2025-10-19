@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Windows 11 Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow: hidden;
+      }
+      .window-shadow {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+      }
+      .resize-handle {
+        position: absolute;
+        z-index: 10;
+      }
+      .resize-handle-top { top: -4px; left: 4px; right: 4px; height: 8px; cursor: n-resize; }
+      .resize-handle-bottom { bottom: -4px; left: 4px; right: 4px; height: 8px; cursor: s-resize; }
+      .resize-handle-left { top: 4px; bottom: 4px; left: -4px; width: 8px; cursor: w-resize; }
+      .resize-handle-right { top: 4px; bottom: 4px; right: -4px; width: 8px; cursor: e-resize; }
+      .resize-handle-top-left { top: -4px; left: -4px; width: 8px; height: 8px; cursor: nw-resize; }
+      .resize-handle-top-right { top: -4px; right: -4px; width: 8px; height: 8px; cursor: ne-resize; }
+      .resize-handle-bottom-left { bottom: -4px; left: -4px; width: 8px; height: 8px; cursor: se-resize; }
+      .resize-handle-bottom-right { bottom: -4px; right: -4px; width: 8px; height: 8px; cursor: sw-resize; }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translate(-50%, 10px);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+      }
+      .animate-fade-in-up {
+        animation: fadeInUp 0.2s ease-out forwards;
+      }
+
+      .window-opening {
+        animation: window-open 0.2s ease-out forwards;
+      }
+      .window-closing {
+        animation: window-close 0.2s ease-in forwards;
+        pointer-events: none; /* Disable interaction during close animation */
+      }
+
+      @keyframes window-open {
+          from {
+              opacity: 0;
+              transform: translateY(10px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+      }
+
+      @keyframes window-close {
+          from {
+              opacity: 1;
+              transform: translateY(0);
+          }
+          to {
+              opacity: 0;
+              transform: translateY(10px);
+          }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

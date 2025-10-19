@@ -1,186 +1,228 @@
-# Windows 11 OS Clone
+# DurgasOS - Windows 11 Replica
 
-A comprehensive Windows 11 operating system clone built with Next.js, TypeScript, and Tailwind CSS. This project recreates the authentic Windows 11 experience in a web browser, including the boot screen, desktop interface, start menu, and various system applications.
+A fully functional Windows 11 operating system replica built with Next.js, TypeScript, and modern web technologies. Experience the Windows 11 desktop environment in your browser with working applications, window management, and system features.
 
-## 🚀 Features
+![DurgasOS Preview](https://via.placeholder.com/800x600/0078d4/ffffff?text=DurgasOS+Windows+11+Replica)
 
-### Core System Components
-- ✅ **Boot Screen** - Authentic Windows 11 loading experience with progress bar
-- ✅ **Desktop Interface** - Complete desktop with wallpaper, icons, and taskbar
-- ✅ **Start Menu** - Windows 11 centered start menu with pinned apps and search
-- ✅ **Window Management** - Full window system (minimize, maximize, close, drag, resize)
-- ✅ **Taskbar** - Windows 11 style taskbar with system tray
+## ✨ Features
 
-### System Applications
-- ✅ **About Me** - Personal portfolio and information app
-- ✅ **File Explorer** - Windows 11 File Explorer with navigation and search
-- ✅ **Settings** - System settings and preferences with categories
-- ✅ **Calculator** - Fully functional Windows 11 Calculator app
-- ✅ **Notepad** - Text editor with formatting options and word count
+### 🖥️ Desktop Environment
+- **Windows 11-style Desktop**: Authentic Windows 11 look and feel
+- **Desktop Icons**: Interactive desktop icons with hover effects
+- **Wallpaper System**: Customizable desktop backgrounds
+- **Context Menus**: Right-click functionality (coming soon)
 
-### Advanced Features
-- ✅ **Smooth Animations** - Framer Motion powered transitions
-- ✅ **Responsive Design** - Works on different screen sizes
-- ✅ **State Management** - Zustand for efficient state handling
-- ✅ **TypeScript** - Full type safety throughout the application
-- ✅ **Modern UI** - Windows 11 Fluent Design System
+### 🪟 Window Management
+- **Resizable Windows**: Drag to resize windows from any corner or edge
+- **Draggable Windows**: Click and drag window headers to move windows
+- **Window Controls**: Minimize, maximize, and close buttons
+- **Window Stacking**: Proper z-index management and focus handling
+- **Multi-window Support**: Open multiple applications simultaneously
 
-## 🛠️ Tech Stack
+### 📱 Taskbar & Start Menu
+- **Windows 11 Taskbar**: Authentic taskbar with start button
+- **Start Menu**: Modern Windows 11 start menu with app grid
+- **System Tray**: Time, volume, network, and system controls
+- **Application Icons**: Running applications appear in taskbar
 
-- **Framework**: Next.js 14 with App Router
+### 🚀 Applications
+- **About Me**: Personal portfolio application
+- **Calculator**: Full-featured calculator with arithmetic operations
+- **Notepad**: Text editor with save and download functionality
+- **File Explorer**: File management system (coming soon)
+- **Settings**: System customization panel (coming soon)
+- **Weather Widget**: Weather information display (coming soon)
+
+### ⌨️ Keyboard Shortcuts
+- **Windows Key**: Toggle start menu
+- **Escape**: Close start menu
+- **Alt + Tab**: Switch between windows (coming soon)
+- **F5**: Refresh desktop
+- **Ctrl + Alt + Del**: Task manager (coming soon)
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 14+ with App Router
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS + Custom CSS
-- **Animations**: Framer Motion
+- **Styling**: Tailwind CSS + CSS Modules
 - **State Management**: Zustand
-- **Icons**: Lucide React + Emoji icons
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
 - **Build Tool**: Next.js built-in bundler
 
 ## 📦 Installation
 
+### Prerequisites
+- Node.js 18.0 or later
+- npm, yarn, or pnpm
+
+### Setup Instructions
+
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd windows11-clone
+   git clone https://github.com/your-username/durgas-os.git
+   cd durgas-os
    ```
 
 2. **Install dependencies**
    ```bash
    npm install
+   # or
+   yarn install
+   # or
+   pnpm install
    ```
 
-3. **Run the development server**
+3. **Start the development server**
    ```bash
    npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
    ```
 
 4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 🎮 Usage
-
-### Desktop Interaction
-- **Click** on desktop icons to select them
-- **Double-click** on icons to open applications
-- **Right-click** on desktop for context menu (Coming Soon)
-- **Click** on desktop to deselect all icons
-
-### Start Menu
-- **Click** the Windows logo in the taskbar to open start menu
-- **Type** to search for applications
-- **Click** on apps to launch them
-- **Click** outside to close the start menu
-
-### Window Management
-- **Drag** the title bar to move windows
-- **Click** minimize (-) to minimize windows
-- **Click** maximize (□) to maximize/restore windows
-- **Click** close (×) to close windows
-- **Click** on windows to bring them to front
-
-### Taskbar
-- **Click** pinned apps to launch them
-- **Click** the start button to open start menu
-- **View** system information in the system tray
+   Navigate to [http://localhost:3000](http://localhost:3000) to see DurgasOS in action!
 
 ## 🏗️ Project Structure
 
 ```
-windows11-clone/
+durgasOS/
 ├── src/
-│   ├── app/                 # Next.js app router
-│   ├── components/          # React components
-│   │   ├── system/         # Core system components
-│   │   ├── apps/           # Application components
-│   │   ├── ui/             # Reusable UI components
-│   │   └── common/         # Common components
-│   ├── hooks/              # Custom React hooks
-│   ├── store/              # Zustand state stores
-│   ├── types/              # TypeScript type definitions
-│   └── utils/              # Utility functions
-├── public/                 # Static assets
-│   └── images/            # Images and wallpapers
-└── styles/                # Global styles
+│   ├── app/                    # Next.js App Router
+│   │   ├── globals.css        # Global styles
+│   │   ├── layout.tsx         # Root layout
+│   │   ├── page.tsx           # Main desktop page
+│   │   └── loading.tsx        # Loading screen
+│   ├── components/
+│   │   ├── desktop/           # Desktop components
+│   │   ├── taskbar/           # Taskbar components
+│   │   ├── windows/           # Window management
+│   │   ├── startmenu/         # Start menu components
+│   │   └── apps/              # Application components
+│   ├── hooks/                 # Custom React hooks
+│   ├── store/                 # Zustand state stores
+│   ├── types/                 # TypeScript type definitions
+│   └── utils/                 # Utility functions
+├── public/                    # Static assets
+└── docs/                      # Documentation
 ```
+
+## 🎮 Usage
+
+### Desktop Interaction
+1. **Click** on desktop icons to select them
+2. **Double-click** on desktop icons to open applications
+3. **Right-click** on desktop for context menu (coming soon)
+4. **Click** on the start button to open the start menu
+
+### Window Management
+1. **Drag** window headers to move windows
+2. **Resize** windows by dragging the edges or corners
+3. **Click** minimize, maximize, or close buttons
+4. **Click** on taskbar icons to restore minimized windows
+
+### Applications
+- **About Me**: View personal information and skills
+- **Calculator**: Perform arithmetic calculations
+- **Notepad**: Edit and save text files
 
 ## 🎨 Customization
 
-### Adding New Applications
-1. Create a new app component in `src/components/apps/`
-2. Register the app in `src/app/page.tsx`
-3. Add the app to the system store if needed
+### Themes
+The application supports light and dark themes that can be toggled through the system settings.
 
-### Changing Wallpaper
-1. Add your image to `public/images/wallpapers/`
-2. Update the wallpaper path in `src/store/systemStore.ts`
+### Wallpapers
+You can customize the desktop wallpaper by modifying the wallpaper path in the desktop store.
 
-### Modifying Colors
-1. Update the color palette in `tailwind.config.js`
-2. Modify CSS variables in `src/app/globals.css`
+### Applications
+Add new applications by:
+1. Creating a new component in `src/components/apps/`
+2. Registering the app in the application store
+3. Adding it to the start menu grid
 
-## 🚧 Development Roadmap
+## 🚀 Deployment
 
-### Phase 1: Foundation ✅
-- [x] Project setup and structure
-- [x] Core system components
-- [x] Window management system
-- [x] State management
+### Vercel (Recommended)
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Deploy with zero configuration
 
-### Phase 2: Boot & Desktop ✅
-- [x] Boot screen animation
-- [x] Desktop interface
-- [x] Taskbar implementation
-- [x] Start menu
+### Other Platforms
+The application can be deployed to any platform that supports Next.js:
+- Netlify
+- AWS Amplify
+- Railway
+- DigitalOcean App Platform
 
-### Phase 3: Applications ✅
-- [x] About Me app
-- [x] File Explorer
-- [x] Settings app
-- [x] Calculator
-- [x] Notepad
-- [ ] Microsoft Edge (simplified)
+## 🧪 Development
 
-### Phase 4: Advanced Features ✅
-- [x] Smooth animations and transitions
-- [x] Responsive design
-- [x] Window management system
-- [x] State management
-- [ ] Context menus (foundation implemented)
-- [ ] System notifications
-- [ ] Keyboard shortcuts
-- [ ] Multiple desktop support
-- [ ] Window snapping
+### Available Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run type-check` - Run TypeScript type checking
 
-### Phase 5: Polish & Optimization ✅
-- [x] Performance optimization
-- [x] Accessibility improvements
-- [x] Mobile responsiveness
-- [x] Documentation
-- [ ] Testing coverage
+### Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📝 Roadmap
+
+### Phase 1 (Current)
+- ✅ Basic desktop environment
+- ✅ Window management system
+- ✅ Start menu and taskbar
+- ✅ Core applications (About Me, Calculator, Notepad)
+
+### Phase 2 (Coming Soon)
+- 🔄 File Explorer with folder navigation
+- 🔄 Settings panel with customization options
+- 🔄 Weather widget with real-time data
+- 🔄 Desktop context menu
+- 🔄 Keyboard shortcuts (Alt+Tab, Win+D, etc.)
+
+### Phase 3 (Future)
+- 🔮 Multi-user support
+- 🔮 File system simulation
+- 🔮 Network and internet functionality
+- 🔮 Advanced window features (snap, virtual desktops)
+- 🔮 System sounds and notifications
+
+## 🐛 Known Issues
+
+- Window maximization needs proper implementation
+- Some keyboard shortcuts are placeholders
+- File system is not persistent between sessions
+- No real file operations (read-only simulation)
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
 - Microsoft for the Windows 11 design inspiration
-- Next.js team for the amazing framework
-- Tailwind CSS for the utility-first CSS framework
-- Framer Motion for smooth animations
-- Zustand for simple state management
+- The Next.js team for the amazing framework
+- The React community for excellent libraries and tools
+- Figma community for design resources
 
-## 📞 Contact
+## 📞 Support
 
-If you have any questions or suggestions, feel free to open an issue or reach out to the maintainers.
+If you encounter any issues or have questions:
+- Create an issue on GitHub
+- Check the documentation in the `docs/` folder
+- Review the code comments for implementation details
 
 ---
 
-**Note**: This is a fan project created for educational purposes. Windows 11 is a trademark of Microsoft Corporation.
+**DurgasOS** - Bringing the Windows 11 experience to the web! 🚀

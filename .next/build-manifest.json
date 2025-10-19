@@ -1,0 +1,47 @@
+{
+  "polyfillFiles": [
+    "static/chunks/polyfills.js"
+  ],
+  "devFiles": [],
+  "ampDevFiles": [],
+  "lowPriorityFiles": [
+    "static/development/_buildManifest.js",
+    "static/development/_ssgManifest.js"
+  ],
+  "rootMainFiles": [
+    "static/chunks/webpack.js",
+    "static/chunks/vendor-node_modules_framer-motion_dist_es_a.js",
+    "static/chunks/vendor-node_modules_framer-motion_dist_es_d.js",
+    "static/chunks/vendor-node_modules_framer-motion_dist_es_m.js",
+    "static/chunks/vendor-node_modules_framer-motion_dist_es_value_i.js",
+    "static/chunks/vendor-node_modules_l.js",
+    "static/chunks/vendor-node_modules_next_dist_client_ad.js",
+    "static/chunks/vendor-node_modules_next_dist_client_a.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_b.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_layout-router_js-4906aef6.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_m.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_p.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_react-dev-overlay_internal_components_C.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_react-dev-overlay_internal_components_O.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_react-dev-overlay_internal_c.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_react-dev-overlay_internal_h.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_react-dev-overlay_internal_styles_B.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_rea.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_re.js",
+    "static/chunks/vendor-node_modules_next_dist_client_components_router-reducer_p.js",
+    "static/chunks/vendor-node_modules_next_dist_client_c.js",
+    "static/chunks/vendor-node_modules_next_dist_client_f.js",
+    "static/chunks/vendor-node_modules_next_dist_compiled_a.js",
+    "static/chunks/vendor-node_modules_next_dist_compiled_react-dom_cjs_react-dom_development_js-3041f41d.js",
+    "static/chunks/vendor-node_modules_next_dist_compiled_react-d.js",
+    "static/chunks/vendor-node_modules_next_dist_compiled_react_c.js",
+    "static/chunks/vendor-node_modules_next_dist_compiled_r.js",
+    "static/chunks/vendor-node_modules_n.js",
+    "static/chunks/vendor-node_modules_zustand_esm_i.js",
+    "static/chunks/main-app.js"
+  ],
+  "pages": {
+    "/_app": []
+  },
+  "ampFirstPages": []
+}

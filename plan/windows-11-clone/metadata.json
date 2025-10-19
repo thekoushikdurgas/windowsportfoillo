@@ -1,0 +1,5 @@
+{
+  "name": "Windows 11 Clone",
+  "description": "A web-based replica of the Windows 11 operating system interface, including a loading screen, desktop, taskbar, start menu, and draggable, resizable app windows.",
+  "requestFramePermissions": []
+}

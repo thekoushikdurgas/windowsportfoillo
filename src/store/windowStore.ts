@@ -1,144 +1,194 @@
-import { create } from 'zustand';
-import { WindowState, WindowManagerState } from '@/types/window';
-import { generateId } from '@/utils/helpers';
-import { WINDOW_CONSTANTS } from '@/utils/constants';
+import { create } from 'zustand'
+import { WindowState, WindowAction } from '@/types/window'
 
-interface WindowStore extends WindowManagerState {
-  openWindow: (props: {
-    title: string;
-    appId: string;
-    initialPosition?: { x: number; y: number };
-    initialSize?: { width: number; height: number };
-  }) => void;
-  closeWindow: (id: string) => void;
-  minimizeWindow: (id: string) => void;
-  maximizeWindow: (id: string) => void;
-  focusWindow: (id: string) => void;
-  moveWindow: (id: string, position: { x: number; y: number }) => void;
-  resizeWindow: (id: string, size: { width: number; height: number }) => void;
-  bringToFront: (id: string) => void;
-  setCrop: (id: string, crop: { x: number; y: number; width: number; height: number } | null) => void;
+interface WindowStoreState {
+  windows: Record<string, WindowState>
+  focusedWindow: string | null
+  nextZIndex: number
+  actions: {
+    openWindow: (window: WindowState) => void
+    closeWindow: (id: string) => void
+    minimizeWindow: (id: string) => void
+    maximizeWindow: (id: string) => void
+    restoreWindow: (id: string) => void
+    focusWindow: (id: string) => void
+    updateWindowPosition: (id: string, position: { x: number; y: number }) => void
+    updateWindowSize: (id: string, size: { width: number; height: number }) => void
+    setWindowDragging: (id: string, isDragging: boolean) => void
+    setWindowResizing: (id: string, isResizing: boolean) => void
+    bringToFront: (id: string) => void
+    moveWindowToDesktop: (windowId: string, desktopId: string) => void
+  }
 }
 
-export const useWindowStore = create<WindowStore>((set, get) => ({
-  windows: [],
-  activeWindowId: null,
+export const useWindowStore = create<WindowStoreState>((set, get) => ({
+  windows: {},
+  focusedWindow: null,
   nextZIndex: 1,
 
-  openWindow: (props) => {
-    const { windows, nextZIndex } = get();
-    const newWindow: WindowState = {
-      id: generateId(),
-      title: props.title,
-      appId: props.appId,
-      isMinimized: false,
-      isMaximized: false,
-      isFocused: true,
-      position: props.initialPosition || { x: 100, y: 100 },
-      size: props.initialSize || { 
-        width: WINDOW_CONSTANTS.DEFAULT_WIDTH, 
-        height: WINDOW_CONSTANTS.DEFAULT_HEIGHT 
-      },
-      zIndex: nextZIndex,
-      crop: null,
-    };
+  actions: {
+    openWindow: (window) => {
+      const newWindow = {
+        ...window,
+        zIndex: get().nextZIndex,
+        isFocused: true,
+      }
+      
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [window.id]: newWindow,
+        },
+        focusedWindow: window.id,
+        nextZIndex: state.nextZIndex + 1,
+      }))
+    },
 
-    // Unfocus other windows
-    const updatedWindows = windows.map(window => ({
-      ...window,
-      isFocused: false,
-    }));
+    closeWindow: (id) => {
+      set((state) => {
+        const { [id]: removed, ...windows } = state.windows
+        const newFocusedWindow = state.focusedWindow === id ? null : state.focusedWindow
+        
+        return {
+          windows,
+          focusedWindow: newFocusedWindow,
+        }
+      })
+    },
 
-    set({
-      windows: [...updatedWindows, newWindow],
-      activeWindowId: newWindow.id,
-      nextZIndex: nextZIndex + 1,
-    });
+    minimizeWindow: (id) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            isMinimized: true,
+            isFocused: false,
+          },
+        },
+        focusedWindow: state.focusedWindow === id ? null : state.focusedWindow,
+      }))
+    },
+
+    maximizeWindow: (id) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            isMaximized: true,
+          },
+        },
+      }))
+    },
+
+    restoreWindow: (id) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            isMinimized: false,
+            isMaximized: false,
+            isFocused: true,
+          },
+        },
+        focusedWindow: id,
+      }))
+    },
+
+    focusWindow: (id) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            isFocused: true,
+            zIndex: state.nextZIndex,
+          },
+        },
+        focusedWindow: id,
+        nextZIndex: state.nextZIndex + 1,
+      }))
+    },
+
+    updateWindowPosition: (id, position) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            position,
+          },
+        },
+      }))
+    },
+
+    updateWindowSize: (id, size) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            size,
+          },
+        },
+      }))
+    },
+
+    setWindowDragging: (id, isDragging) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            isDragging,
+          },
+        },
+      }))
+    },
+
+    setWindowResizing: (id, isResizing) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            isResizing,
+          },
+        },
+      }))
+    },
+
+    bringToFront: (id) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [id]: {
+            ...state.windows[id],
+            zIndex: state.nextZIndex,
+            isFocused: true,
+          },
+        },
+        focusedWindow: id,
+        nextZIndex: state.nextZIndex + 1,
+      }))
+    },
+
+    moveWindowToDesktop: (windowId, desktopId) => {
+      set((state) => ({
+        windows: {
+          ...state.windows,
+          [windowId]: {
+            ...state.windows[windowId],
+            desktopId,
+          },
+        },
+      }))
+    },
   },
+}))
 
-  closeWindow: (id) => {
-    const { windows, activeWindowId } = get();
-    const updatedWindows = windows.filter(window => window.id !== id);
-    
-    set({
-      windows: updatedWindows,
-      activeWindowId: activeWindowId === id ? null : activeWindowId,
-    });
-  },
-
-  minimizeWindow: (id) => {
-    const { windows } = get();
-    const updatedWindows = windows.map(window =>
-      window.id === id ? { ...window, isMinimized: true, isFocused: false } : window
-    );
-
-    set({
-      windows: updatedWindows,
-      activeWindowId: null,
-    });
-  },
-
-  maximizeWindow: (id) => {
-    const { windows } = get();
-    const updatedWindows = windows.map(window =>
-      window.id === id ? { ...window, isMaximized: !window.isMaximized } : window
-    );
-
-    set({ windows: updatedWindows });
-  },
-
-  focusWindow: (id) => {
-    const { windows, nextZIndex } = get();
-    const updatedWindows = windows.map(window => ({
-      ...window,
-      isFocused: window.id === id,
-      zIndex: window.id === id ? nextZIndex : window.zIndex,
-    }));
-
-    set({
-      windows: updatedWindows,
-      activeWindowId: id,
-      nextZIndex: nextZIndex + 1,
-    });
-  },
-
-  moveWindow: (id, position) => {
-    const { windows } = get();
-    const updatedWindows = windows.map(window =>
-      window.id === id ? { ...window, position } : window
-    );
-
-    set({ windows: updatedWindows });
-  },
-
-  resizeWindow: (id, size) => {
-    const { windows } = get();
-    const updatedWindows = windows.map(window =>
-      window.id === id ? { ...window, size } : window
-    );
-
-    set({ windows: updatedWindows });
-  },
-
-  setCrop: (id, crop) => {
-    const { windows } = get();
-    const updatedWindows = windows.map(window =>
-      window.id === id ? { ...window, crop } : window
-    );
-
-    set({ windows: updatedWindows });
-  },
-
-  bringToFront: (id) => {
-    const { windows, nextZIndex } = get();
-    const updatedWindows = windows.map(window => ({
-      ...window,
-      zIndex: window.id === id ? nextZIndex : window.zIndex,
-    }));
-
-    set({
-      windows: updatedWindows,
-      nextZIndex: nextZIndex + 1,
-    });
-  },
-}));
+export const useWindows = () => useWindowStore((state) => state.windows)
+export const useFocusedWindow = () => useWindowStore((state) => state.focusedWindow)
+export const useWindowActions = () => useWindowStore((state) => state.actions)
