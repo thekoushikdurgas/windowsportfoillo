@@ -1,0 +1,5 @@
+/* Portfolio Component Styles */
+
+.skillBar {
+  width: var(--proficiency, 0%);
+}
