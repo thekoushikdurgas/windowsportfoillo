@@ -160,12 +160,12 @@
 }
 
 .taskbar-start-icon {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
   width: 20px;
   height: 20px;
+  object-fit: contain;
   transition: transform var(--win11-animation-fast) var(--win11-easing);
+  display: block;
+  scale: 2;
 }
 
 .taskbar-button:hover .taskbar-start-icon {
@@ -174,19 +174,6 @@
 
 .taskbar-button:active .taskbar-start-icon {
   transform: scale(0.95);
-}
-
-.taskbar-start-icon-square {
-  width: 8px;
-  height: 8px;
-  background-color: var(--win11-accent);
-  border-radius: var(--win11-radius-xs);
-  transition: all var(--win11-animation-fast) var(--win11-easing);
-}
-
-.taskbar-button:hover .taskbar-start-icon-square {
-  background-color: var(--win11-accent-hover);
-  box-shadow: 0 0 4px rgba(0, 120, 212, 0.3);
 }
 
 .taskbar-app-icon-container {

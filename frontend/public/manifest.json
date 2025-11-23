@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "fullscreen",
   "orientation": "any",
-  "theme_color": "#ea580c",
+  "theme_color": "#0078D4",
   "background_color": "#FFFFFF",
   "categories": ["productivity", "utilities", "business"],
   "lang": "en",

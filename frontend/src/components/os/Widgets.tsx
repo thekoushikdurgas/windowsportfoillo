@@ -28,7 +28,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ isOpen, onClose }) => {
   });
 
   const [stocks] = useState([
-    { symbol: 'DURG', name: 'DurgasOS', price: 125.50, change: 3.25, changePercent: 2.66 },
+    { symbol: 'MSFT', name: 'Microsoft', price: 378.85, change: 2.34, changePercent: 0.62 },
     { symbol: 'AAPL', name: 'Apple', price: 175.43, change: -1.23, changePercent: -0.70 },
     { symbol: 'GOOGL', name: 'Alphabet', price: 142.56, change: 0.89, changePercent: 0.63 },
   ]);

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils/cn';
-import { DurgasLogo } from '@/components/ui/DurgasLogo';
 
 interface BootScreenProps {
   onComplete: () => void;
@@ -22,7 +21,13 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   return (
     <div className={cn('boot-screen', visible && 'boot-screen-visible')}>
        <div className="boot-screen-logo">
-          <DurgasLogo size={100} variant="icon" color="#ea580c" />
+          <img 
+            src="/icon.png" 
+            alt="DurgasOS Logo" 
+            className="boot-screen-logo-image"
+            width="100"
+            height="100"
+          />
        </div>
        <div className="boot-screen-spinner"></div>
     </div>

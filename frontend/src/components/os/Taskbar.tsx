@@ -350,12 +350,13 @@ const Taskbar: React.FC<TaskbarProps> = ({
         
         <div className="taskbar-left">
           <button onClick={toggleStart} className={cn('taskbar-button', startOpen && 'taskbar-button-active')} title="Start">
-             <div className="taskbar-start-icon">
-               <div className="taskbar-start-icon-square"></div>
-               <div className="taskbar-start-icon-square"></div>
-               <div className="taskbar-start-icon-square"></div>
-               <div className="taskbar-start-icon-square"></div>
-            </div>
+             <img 
+               src="/icon.png" 
+               alt="DurgasOS Logo" 
+               className="taskbar-start-icon"
+               width="20"
+               height="20"
+             />
           </button>
           
           {displayApps.map(app => {

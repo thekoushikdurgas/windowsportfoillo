@@ -8,11 +8,11 @@ export { WALLPAPERS, DEFAULT_WALLPAPER, getWallpaperById, getWallpapersByCategor
 export const WALLPAPER_URL = '/wallpapers/wallpaper (1).jpg';
 
 export const ACCENT_COLORS = [
-  { id: 'orange', name: 'Durgas Orange', hex: '#ea580c', tailwind: 'orange-600' }, // Default brand color
   { id: 'blue', name: 'Sapphire Blue', hex: '#2563eb', tailwind: 'blue-600' },
   { id: 'purple', name: 'Neon Purple', hex: '#9333ea', tailwind: 'purple-600' },
   { id: 'green', name: 'Emerald', hex: '#059669', tailwind: 'green-600' },
   { id: 'red', name: 'Crimson', hex: '#dc2626', tailwind: 'red-600' },
+  { id: 'orange', name: 'Sunset', hex: '#ea580c', tailwind: 'orange-600' },
   { id: 'pink', name: 'Rose', hex: '#db2777', tailwind: 'pink-600' },
 ];
 

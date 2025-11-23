@@ -31,6 +31,16 @@
 .boot-screen-logo {
   margin-bottom: var(--win11-spacing-16);
   animation: win11-spring var(--win11-animation-slow) var(--win11-easing-spring);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boot-screen-logo-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
 }
 
 .boot-screen-spinner {
@@ -52,6 +62,11 @@
 @media (max-width: 768px) {
   .boot-screen-logo {
     margin-bottom: var(--win11-spacing-12);
+  }
+  
+  .boot-screen-logo-image {
+    width: 80px;
+    height: 80px;
   }
   
   .boot-screen-spinner {
