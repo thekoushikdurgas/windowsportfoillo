@@ -108,6 +108,14 @@
   color: #d1d5db;
 }
 
+.studio-preview-image-wrapper {
+  position: relative;
+  margin-top: 8px;
+  max-width: 320px;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
 .studio-preview-image {
   margin-top: 8px;
   max-width: 320px;
@@ -199,6 +207,9 @@
 
 .studio-result-image-wrapper {
   position: relative;
+  width: 100%;
+  max-height: 600px;
+  aspect-ratio: 1;
 }
 
 .studio-result-image {

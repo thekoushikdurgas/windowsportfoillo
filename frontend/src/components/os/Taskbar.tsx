@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import Image from 'next/image';
 import { AppDefinition, WindowState } from '@/types';
 import { useTheme } from '@/context/ThemeContext';
 import { 
@@ -350,12 +351,13 @@ const Taskbar: React.FC<TaskbarProps> = ({
         
         <div className="taskbar-left">
           <button onClick={toggleStart} className={cn('taskbar-button', startOpen && 'taskbar-button-active')} title="Start">
-             <img 
+             <Image 
                src="/icon.png" 
                alt="DurgasOS Logo" 
                className="taskbar-start-icon"
-               width="20"
-               height="20"
+               width={20}
+               height={20}
+               priority
              />
           </button>
           

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { WindowProps } from '@/types';
 import { generateImage, editImage, generateVideo } from '@/services/geminiService';
 import { Image as ImageIcon, Video, Wand2, Download, Loader2 } from 'lucide-react';
@@ -96,8 +97,23 @@ const StudioApp: React.FC<WindowProps> = () => {
                 className="studio-file-input"
               />
               {previewUrl && (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={previewUrl} alt="Preview" className="studio-preview-image" />
+                previewUrl.startsWith('data:') ? (
+                  // Use regular img for base64 data URLs as next/image doesn't support them
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={previewUrl} alt="Preview" className="studio-preview-image" />
+                ) : (
+                  <div className="studio-preview-image-wrapper">
+                    <Image 
+                      src={previewUrl} 
+                      alt="Preview" 
+                      className="studio-preview-image"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      style={{ objectFit: 'contain' }}
+                      unoptimized
+                    />
+                  </div>
+                )
               )}
             </div>
           )}
@@ -161,8 +177,21 @@ const StudioApp: React.FC<WindowProps> = () => {
               <video src={resultUrl} controls className="studio-result-video" />
             ) : (
               <div className="studio-result-image-wrapper">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={resultUrl} alt="Generated" className="studio-result-image" />
+                {resultUrl.startsWith('data:') || resultUrl.startsWith('blob:') ? (
+                  // Use regular img for base64/blob URLs as next/image doesn't support them
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={resultUrl} alt="Generated" className="studio-result-image" />
+                ) : (
+                  <Image 
+                    src={resultUrl} 
+                    alt="Generated" 
+                    className="studio-result-image"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                    style={{ objectFit: 'contain' }}
+                    unoptimized
+                  />
+                )}
                 <a
                   href={resultUrl}
                   download

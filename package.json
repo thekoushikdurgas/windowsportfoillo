@@ -4,9 +4,9 @@
   "description": "A sophisticated web-based operating system that replicates Windows 11",
   "private": true,
   "scripts": {
-    "dev": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build",
-    "start": "cd frontend && npm run start",
+    "dev": "node init && cd frontend && npm run dev",
+    "build": "node init && cd frontend && npm run build",
+    "start": "node init && cd frontend && npm run start",
     "electron:dev": "cd electron && npm install && npm start",
     "electron:build": "cd frontend && npm run build && cd ../electron && npm install && npm run build",
     "electron:build:win": "cd frontend && npm run build && cd ../electron && npm run build:win",
@@ -23,4 +23,3 @@
   "author": "DurgasOS",
   "license": "MIT"
 }
-

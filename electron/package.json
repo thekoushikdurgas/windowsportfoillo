@@ -4,11 +4,11 @@
   "description": "DurgasOS Desktop Application",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder",
-    "build:win": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux"
+    "start": "node init && electron .",
+    "build": "node init && electron-builder",
+    "build:win": "node init && electron-builder --win",
+    "build:mac": "node init && electron-builder --mac",
+    "build:linux": "node init && electron-builder --linux"
   },
   "keywords": [
     "electron",
@@ -64,4 +64,3 @@
     }
   }
 }
-
