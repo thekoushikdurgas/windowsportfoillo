@@ -1,0 +1,109 @@
+
+
+python -m uvicorn app.main:app --reload
+
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# ===========================================
+# DURGASOS PROJECT COMMANDS
+# ===========================================
+
+# Installation & Setup
+npm install
+npm run clean:all
+
+# Development Commands
+npm run dev                  
+npm run dev:fast            
+npm run dev:webpack         
+
+# AI/Genkit Commands
+npm run genkit:dev          
+npm run genkit:watch        
+
+# Error Logging
+npm run lint > error.txt
+npx tsc --noEmit > error1.txt
+npx tsc --noEmit --skipLibCheck > error2.txt
+
+
+# Build Commands
+npm run build    
+npm run build:turbo         
+npm run build:analyze       
+npm run build:clean         
+npm run start               
+
+# Code Quality Commands
+npm run lint                
+npm run lint:fix            
+npm run format              
+npm run format:check        
+npm run typecheck           
+
+# Testing Commands
+npm run test                
+npm run test:watch          
+npm run test:coverage       
+npm run test:e2e            
+npm run test:e2e:ui         
+npm run test:e2e:headed     
+npm run test:e2e:debug      
+npm run test:all            
+
+# Performance & Analysis
+npm run perf                
+npm run clean               
+
+# Git Hooks & CI
+npm run prepare             
+npm run pre-commit          
+npm run pre-push            
+npm run ci                  
+
+# Electron Commands
+npm run electron            
+npm run electron:dev        
+npm run electron:build      
+npm run electron:dist       
+npm run electron:pack       
+
+# ===========================================
+# ADDITIONAL USEFUL COMMANDS
+# ===========================================
+
+# System Commands
+taskkill /f /im node.exe    
+npm cache clean --force     
+
+# Direct Next.js Commands
+npx next lint               
+npx next build              
+npx tsc --noEmit            
+npx tsc --noEmit --skipLibCheck
+
+# ===========================================
+# GIT COMMANDS
+# ===========================================
+
+# Git Setup
+git init
+git config --global user.email "koushik.btech.cse.19@nitap.ac.in"
+git config --global user.name "thekoushikdurgas"
+
+# Git Workflow
+git add .
+git commit -m "30/10/25"
+git remote add origin https://github.com/thekoushikdurgas/windowsportfoillo.git
+git branch -M main
+git push -u origin main -f
+
+# ===========================================
+# PROJECT NOTES
+# ===========================================
+
+# Web Scraping Notes:
+# - Handle login popups with class "top-level-modal-container"
+# - Implement infinite scrolling before scraping
+# - Look for "See more jobs" button and click before scraping
+# - Break tasks into smaller manageable pieces

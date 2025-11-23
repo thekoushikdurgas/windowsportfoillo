@@ -1,0 +1,9 @@
+{
+  "name": "DurgasOS",
+  "description": "A web-based Windows 11 simulator powered by Gemini 2.5 and 3.0 models, featuring a full desktop environment, window management, and AI-integrated applications for chat, media generation, and real-time voice interaction.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

@@ -1,0 +1,191 @@
+import { GoogleGenAI, Modality } from "@google/genai";
+import { MODELS, GEMINI_API_KEY } from "@/lib/constants";
+
+export const getGenAI = async (forceUserKey = false) => {
+  let key = GEMINI_API_KEY;
+  if (forceUserKey && typeof window !== 'undefined' && (window as any).aistudio) {
+     // In a real scenario, the key is injected by the environment
+  }
+  return new GoogleGenAI({ apiKey: key });
+};
+
+export const generateChatResponse = async (
+  history: { role: string; text: string }[],
+  message: string,
+  model: string = MODELS.CHAT_COMPLEX,
+  useThinking = false,
+  useGrounding = false
+) => {
+  const ai = await getGenAI();
+  
+  const tools: any[] = [];
+  if (useGrounding) {
+    tools.push({ googleSearch: {} });
+    if (!model.includes('gemini-3-pro')) {
+       tools.push({ googleMaps: {} });
+    }
+  }
+
+  const config: any = {
+    tools: tools.length > 0 ? tools : undefined,
+  };
+
+  if (useThinking && model.includes('gemini-3-pro')) {
+      config.thinkingConfig = { thinkingBudget: 16000 };
+  }
+  
+  const chatHistory = history.map(h => ({
+    role: h.role,
+    parts: [{ text: h.text }]
+  }));
+
+  const chat = ai.chats.create({
+    model,
+    config,
+    history: chatHistory
+  });
+
+  const result = await chat.sendMessage({ message });
+  return {
+    text: result.text,
+    groundingMetadata: result.candidates?.[0]?.groundingMetadata
+  };
+};
+
+export const generateImage = async (prompt: string, aspectRatio: string = "1:1", isHQ = false) => {
+  const ai = await getGenAI();
+  const model = isHQ ? MODELS.IMAGE_GEN_HQ : MODELS.IMAGE_GEN_FAST;
+
+  const response = await ai.models.generateContent({
+    model,
+    contents: {
+      parts: [{ text: prompt }]
+    },
+    config: {
+      imageConfig: {
+        aspectRatio: aspectRatio,
+        imageSize: isHQ ? "2K" : undefined
+      }
+    }
+  });
+
+  const images: string[] = [];
+  if (response.candidates?.[0]?.content?.parts) {
+    for (const part of response.candidates[0].content.parts) {
+      if (part.inlineData && part.inlineData.data) {
+        images.push(`data:${part.inlineData.mimeType};base64,${part.inlineData.data}`);
+      }
+    }
+  }
+  return images;
+};
+
+export const editImage = async (base64Image: string, prompt: string) => {
+  const ai = await getGenAI();
+  const response = await ai.models.generateContent({
+    model: MODELS.IMAGE_EDIT,
+    contents: {
+      parts: [
+        {
+          inlineData: {
+            data: base64Image.split(',')[1],
+            mimeType: 'image/png'
+          }
+        },
+        { text: prompt }
+      ]
+    }
+  });
+
+   const images: string[] = [];
+   if (response.candidates?.[0]?.content?.parts) {
+    for (const part of response.candidates[0].content.parts) {
+      if (part.inlineData && part.inlineData.data) {
+        images.push(`data:${part.inlineData.mimeType};base64,${part.inlineData.data}`);
+      }
+    }
+  }
+  return images;
+}
+
+export const generateVideo = async (prompt: string, aspectRatio: string = "16:9", imageBase64?: string) => {
+  const ai = await getGenAI(true);
+  
+  let operation;
+  
+  if (imageBase64) {
+    operation = await ai.models.generateVideos({
+      model: MODELS.VIDEO_VEO_FAST,
+      prompt,
+      image: {
+        imageBytes: imageBase64.split(',')[1],
+        mimeType: 'image/png'
+      },
+      config: {
+        numberOfVideos: 1,
+        aspectRatio: aspectRatio as any,
+        resolution: '720p'
+      }
+    });
+  } else {
+     operation = await ai.models.generateVideos({
+      model: MODELS.VIDEO_VEO_FAST,
+      prompt,
+      config: {
+        numberOfVideos: 1,
+        aspectRatio: aspectRatio as any,
+        resolution: '720p'
+      }
+    });
+  }
+
+  while (!operation.done) {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    operation = await ai.operations.getVideosOperation({ operation });
+  }
+
+  const videoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
+  if (!videoUri) throw new Error("No video generated");
+  
+  const res = await fetch(`${videoUri}&key=${GEMINI_API_KEY}`);
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
+};
+
+export const transcribeAudio = async (base64Audio: string, mimeType: string = 'audio/mp3') => {
+    const ai = await getGenAI();
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: {
+            parts: [
+                { inlineData: { mimeType: mimeType, data: base64Audio } }, 
+                { text: "Transcribe this audio exactly." }
+            ]
+        }
+    });
+    return response.text;
+};
+
+export const generateSpeech = async (text: string) => {
+    const ai = await getGenAI();
+    const response = await ai.models.generateContent({
+        model: MODELS.AUDIO_TTS,
+        contents: { parts: [{ text }] },
+        config: {
+            responseModalities: [Modality.AUDIO],
+            speechConfig: {
+                voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Fenrir' } }
+            }
+        }
+    });
+    
+    const base64 = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    if (!base64) throw new Error("No audio generated");
+    
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
+    return bytes;
+};
+

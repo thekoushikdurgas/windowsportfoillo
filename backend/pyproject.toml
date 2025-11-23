@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "durgasos-backend"
+version = "0.1.0"
+description = "DurgasOS FastAPI Backend"
+authors = ["DurgasOS Team"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
