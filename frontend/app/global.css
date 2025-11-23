@@ -1,9 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Import Windows 11 styles */
 @import '../src/styles/windows11.css';
+
+/* Import component styles */
+@import '../src/styles/components.css';
 
 :root {
   --background: #ffffff;
@@ -17,31 +16,85 @@
   }
 }
 
+/* Viewport dimensions - use dynamic viewport units with fallback */
+:root {
+  --viewport-height: 100vh;
+  --viewport-width: 100vw;
+  --viewport-height-dynamic: 100dvh;
+  --viewport-width-dynamic: 100dvw;
+  --taskbar-height: 48px;
+  --taskbar-height-mobile: 56px;
+}
+
+/* Use dynamic viewport units where supported, fallback to regular vh/vw */
+@supports (height: 100dvh) {
+  :root {
+    --viewport-height: 100dvh;
+    --viewport-width: 100dvw;
+  }
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--win11-font-family-base);
+  font: var(--win11-text-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: var(--win11-line-height-normal);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-400 rounded-full;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
-  }
+.text-balance {
+  text-wrap: balance;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Viewport container for main app - Full screen */
+.viewport-container {
+  height: var(--viewport-height, 100vh);
+  width: var(--viewport-width, 100vw);
+  max-height: var(--viewport-height, 100vh);
+  max-width: var(--viewport-width, 100vw);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
 }
 

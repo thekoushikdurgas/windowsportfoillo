@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SNAP_LAYOUTS, WINDOW_CONFIG, BORDER_RADIUS } from '@/lib/windows11';
 import { useTheme } from '@/context/ThemeContext';
-import { cn } from '@/lib/utils/cn';
 
 export interface SnapZone {
   id: string;
@@ -34,41 +33,28 @@ export const SnapLayouts: React.FC<SnapLayoutsProps> = ({
   windowPosition,
   windowSize,
   onSnap,
-  onUnsnap,
   isDragging,
   viewportWidth,
   viewportHeight,
 }) => {
-  const { isDarkMode, accentColor } = useTheme();
+  const { accentColor } = useTheme();
   const [activeZone, setActiveZone] = useState<SnapZone | null>(null);
   const [showZones, setShowZones] = useState(false);
 
-  // Detect when window is near edges for snap zones
-  useEffect(() => {
-    if (!isDragging) {
-      setShowZones(false);
-      setActiveZone(null);
-      return;
-    }
-
-    const threshold = WINDOW_CONFIG.snapThreshold;
-    const centerX = windowPosition.x + windowSize.width / 2;
-    const centerY = windowPosition.y + windowSize.height / 2;
-
-    // Check proximity to edges
-    const nearLeft = windowPosition.x < threshold;
-    const nearRight = windowPosition.x + windowSize.width > viewportWidth - threshold;
-    const nearTop = windowPosition.y < threshold;
-    const nearBottom = windowPosition.y + windowSize.height > viewportHeight - threshold;
-
-    if (nearLeft || nearRight || nearTop || nearBottom) {
-      setShowZones(true);
-      detectSnapZone(centerX, centerY);
-    } else {
-      setShowZones(false);
-      setActiveZone(null);
-    }
-  }, [isDragging, windowPosition, windowSize, viewportWidth, viewportHeight]);
+  const createZone = useCallback((
+    layout: SnapZone['layout'],
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): SnapZone => ({
+    id: `${layout}-${windowId}`,
+    x: x * viewportWidth,
+    y: y * viewportHeight,
+    width: width * viewportWidth,
+    height: height * viewportHeight,
+    layout,
+  }), [windowId, viewportWidth, viewportHeight]);
 
   const detectSnapZone = useCallback((centerX: number, centerY: number) => {
     const threshold = WINDOW_CONFIG.snapThreshold;
@@ -114,22 +100,34 @@ export const SnapLayouts: React.FC<SnapLayoutsProps> = ({
     }
 
     setActiveZone(detectedZone);
-  }, [viewportWidth, viewportHeight]);
+  }, [viewportWidth, viewportHeight, createZone]);
 
-  const createZone = (
-    layout: SnapZone['layout'],
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ): SnapZone => ({
-    id: `${layout}-${windowId}`,
-    x: x * viewportWidth,
-    y: y * viewportHeight,
-    width: width * viewportWidth,
-    height: height * viewportHeight,
-    layout,
-  });
+  // Detect when window is near edges for snap zones
+  useEffect(() => {
+    if (!isDragging) {
+      setShowZones(false);
+      setActiveZone(null);
+      return;
+    }
+
+    const threshold = WINDOW_CONFIG.snapThreshold;
+    const centerX = windowPosition.x + windowSize.width / 2;
+    const centerY = windowPosition.y + windowSize.height / 2;
+
+    // Check proximity to edges
+    const nearLeft = windowPosition.x < threshold;
+    const nearRight = windowPosition.x + windowSize.width > viewportWidth - threshold;
+    const nearTop = windowPosition.y < threshold;
+    const nearBottom = windowPosition.y + windowSize.height > viewportHeight - threshold;
+
+    if (nearLeft || nearRight || nearTop || nearBottom) {
+      setShowZones(true);
+      detectSnapZone(centerX, centerY);
+    } else {
+      setShowZones(false);
+      setActiveZone(null);
+    }
+  }, [isDragging, windowPosition, windowSize, viewportWidth, viewportHeight, detectSnapZone]);
 
   // Auto-snap when zone is detected and dragging stops
   useEffect(() => {
@@ -158,11 +156,7 @@ export const SnapLayouts: React.FC<SnapLayoutsProps> = ({
 
   return (
     <div
-      className={cn(
-        'win11-snap-zone',
-        'fixed pointer-events-none z-[9999]',
-        'animate-[win11-snap-indicator_1s_ease-in-out_infinite]'
-      )}
+      className="snap-layouts-zone"
       style={zoneStyle}
     />
   );
@@ -188,28 +182,20 @@ export const SnapLayoutPreview: React.FC<{
 
   return (
     <div
-      className={cn(
-        'absolute top-12 left-1/2 -translate-x-1/2',
-        'win11-acrylic rounded-lg p-2 shadow-xl border',
-        isDarkMode ? 'border-white/10' : 'border-black/10',
-        'flex gap-2 z-[10000]'
-      )}
+      className="snap-layouts-preview"
+      data-theme={isDarkMode ? 'dark' : 'light'}
     >
       {layouts.map((layout) => (
         <button
           key={layout.key}
           onClick={() => onSelectLayout(layout.key)}
-          className={cn(
-            'p-3 rounded-md transition-all',
-            'hover:bg-white/10 active:scale-95',
-            'flex flex-col items-center gap-1'
-          )}
+          className="snap-layouts-preview-button"
           style={{
             border: `1px solid ${accentColor.hex}40`,
           }}
         >
-          <span className="text-2xl">{layout.icon}</span>
-          <span className="text-xs text-white">{layout.label}</span>
+          <span className="snap-layouts-preview-icon">{layout.icon}</span>
+          <span className="snap-layouts-preview-label">{layout.label}</span>
         </button>
       ))}
     </div>

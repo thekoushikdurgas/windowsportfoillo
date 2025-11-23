@@ -4,25 +4,21 @@ import React, { useState, useRef, useEffect } from 'react';
 import { WindowProps } from '@/types';
 import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils/cn';
-import { FileText, Save, File } from 'lucide-react';
+import { Save, File } from 'lucide-react';
 
-const NotepadApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
+const NotepadApp: React.FC<WindowProps> = () => {
   const { isDarkMode } = useTheme();
   const [content, setContent] = useState('');
   const [fileName, setFileName] = useState('Untitled');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const bgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white';
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
-  const hoverBg = isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5';
 
   // Auto-focus on mount
   useEffect(() => {
-    if (isActive && textareaRef.current) {
+    if (textareaRef.current) {
       textareaRef.current.focus();
     }
-  }, [isActive]);
+  }, []);
 
   const handleSave = () => {
     // In a real app, this would save to a file system
@@ -44,29 +40,25 @@ const NotepadApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
   };
 
   return (
-    <div className={cn('h-full flex flex-col', bgColor, textColor)}>
+    <div className={cn('notepad-container')} data-theme={isDarkMode ? 'dark' : 'light'}>
       {/* Toolbar */}
-      <div className={cn(
-        'h-10 flex items-center gap-2 px-4 border-b shrink-0',
-        borderColor,
-        isDarkMode ? 'bg-[#2d2d2d]' : 'bg-gray-50'
-      )}>
+      <div className="notepad-toolbar">
         <button
           onClick={handleNew}
-          className={cn('p-2 rounded transition', hoverBg)}
+          className="notepad-toolbar-button"
           title="New"
         >
           <File size={16} />
         </button>
         <button
           onClick={handleSave}
-          className={cn('p-2 rounded transition', hoverBg)}
+          className="notepad-toolbar-button"
           title="Save"
         >
           <Save size={16} />
         </button>
-        <div className="flex-1"></div>
-        <span className="text-xs opacity-70">{fileName}</span>
+        <div className="notepad-toolbar-spacer"></div>
+        <span className="notepad-toolbar-filename">{fileName}</span>
       </div>
 
       {/* Editor */}
@@ -74,17 +66,8 @@ const NotepadApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
         ref={textareaRef}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className={cn(
-          'flex-1 w-full p-4 resize-none outline-none',
-          bgColor,
-          textColor,
-          'font-mono text-sm',
-          'win11-scrollbar'
-        )}
+        className="notepad-editor win11-scrollbar"
         placeholder="Start typing..."
-        style={{
-          fontFamily: 'Consolas, Monaco, "Courier New", monospace',
-        }}
       />
     </div>
   );

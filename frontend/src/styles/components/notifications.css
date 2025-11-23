@@ -1,0 +1,298 @@
+/**
+ * Notifications Component Styles
+ * Styles for the Notification Container and Toast components
+ */
+
+/* ============================================
+   NOTIFICATION CONTAINER
+   ============================================ */
+
+.notification-container {
+  position: absolute;
+  bottom: 48px;
+  right: 0;
+  z-index: 9999;
+  padding: var(--win11-spacing-4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+  overflow: hidden;
+  max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height, 48px) - 52px);
+  gap: var(--win11-spacing-2);
+}
+
+.notification-container-list {
+  display: flex;
+  flex-direction: column-reverse;
+  pointer-events: auto;
+  gap: var(--win11-spacing-2);
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .notification-container {
+    bottom: 64px;
+    padding: var(--win11-spacing-2);
+    left: var(--win11-spacing-2);
+    right: var(--win11-spacing-2);
+    align-items: stretch;
+  }
+  
+  .notification-container-list {
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   NOTIFICATION TOAST
+   ============================================ */
+
+.notification-toast {
+  width: 100%;
+  max-width: 400px;
+  border-radius: var(--win11-radius-lg);
+  box-shadow: var(--win11-elevation-24);
+  border: 1px solid var(--win11-border);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  transform: translateX(100%);
+  opacity: 0;
+  scale: 0.95;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  background-color: var(--win11-surface);
+  animation: win11-slide-in-right var(--win11-animation-normal) var(--win11-easing) forwards;
+}
+
+[data-theme='dark'] .notification-toast {
+  background-color: rgba(45, 45, 45, 0.95);
+  border-color: var(--win11-border);
+}
+
+.notification-toast:hover {
+  transform: translateX(-4px);
+  box-shadow: var(--win11-elevation-24);
+  border-color: var(--win11-border-strong);
+}
+
+.notification-toast-visible {
+  transform: translateX(0);
+  opacity: 1;
+  scale: 1;
+}
+
+.notification-toast-exiting {
+  animation: win11-slide-in-right reverse var(--win11-animation-normal) var(--win11-easing) forwards;
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+@media (max-width: 768px) {
+  .notification-toast {
+    max-width: 100%;
+    transform: translateY(100%);
+  }
+  
+  .notification-toast-visible {
+    transform: translateY(0);
+  }
+  
+  .notification-toast-exiting {
+    transform: translateY(100%);
+  }
+}
+
+.notification-toast-content {
+  padding: var(--win11-spacing-4);
+  position: relative;
+}
+
+.notification-toast-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--win11-accent);
+  border-radius: var(--win11-radius-sm) 0 0 var(--win11-radius-sm);
+  transition: width var(--win11-animation-fast) var(--win11-easing);
+}
+
+.notification-toast:hover .notification-toast-accent {
+  width: 5px;
+}
+
+.notification-toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--win11-spacing-1);
+  padding-left: var(--win11-spacing-3);
+  gap: var(--win11-spacing-2);
+}
+
+.notification-toast-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--win11-spacing-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-toast-icon {
+  color: var(--win11-accent);
+  opacity: 0.9;
+  flex-shrink: 0;
+  transition: transform var(--win11-animation-fast) var(--win11-easing);
+}
+
+.notification-toast:hover .notification-toast-icon {
+  transform: scale(1.1);
+}
+
+.notification-toast-app-name {
+  font: var(--win11-text-xs);
+  font-weight: var(--win11-font-weight-semibold);
+  color: var(--win11-text);
+  opacity: 0.95;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notification-toast-close {
+  padding: var(--win11-spacing-1);
+  border-radius: var(--win11-radius-sm);
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--win11-text-secondary);
+  opacity: 0;
+  flex-shrink: 0;
+  min-width: 24px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.notification-toast:hover .notification-toast-close {
+  opacity: 1;
+}
+
+.notification-toast-close:hover {
+  background-color: var(--win11-error);
+  color: white;
+  transform: scale(1.1);
+}
+
+.notification-toast-close:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--win11-accent);
+  outline-offset: 2px;
+}
+
+.notification-toast-close:active {
+  transform: scale(0.95);
+}
+
+.notification-toast-body {
+  padding-left: var(--win11-spacing-3);
+  margin-top: var(--win11-spacing-1);
+}
+
+.notification-toast-title {
+  font: var(--win11-text-sm);
+  font-weight: var(--win11-font-weight-semibold);
+  margin-bottom: var(--win11-spacing-1);
+  color: var(--win11-text);
+  line-height: var(--win11-line-height-tight);
+}
+
+.notification-toast-message {
+  font: var(--win11-text-xs);
+  line-height: var(--win11-line-height-relaxed);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--win11-text-secondary);
+}
+
+.notification-toast-snooze-menu {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background-color: #2d2d2d;
+  animation: fade-in 200ms;
+}
+
+[data-theme='dark'] .notification-toast-snooze-menu {
+  background-color: #2d2d2d;
+}
+
+.notification-toast-snooze-title {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--win11-text-secondary);
+}
+
+.notification-toast-snooze-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notification-toast-snooze-button {
+  text-align: left;
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--win11-text);
+}
+
+.notification-toast-snooze-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .notification-toast-snooze-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.notification-toast-snooze-cancel {
+  margin-top: auto;
+  text-align: center;
+  font-size: 11px;
+  padding: 4px 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--win11-text-secondary);
+}
+
+.notification-toast-snooze-cancel:hover {
+  color: var(--win11-accent);
+}
+

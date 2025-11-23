@@ -1,0 +1,261 @@
+/**
+ * File Explorer App Styles
+ * Styles for the File Explorer application
+ */
+
+/* ============================================
+   FILE EXPLORER APP
+   ============================================ */
+
+.file-explorer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+  font-family: var(--win11-font-family-base);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .file-explorer-container {
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+}
+
+.file-explorer-toolbar {
+  background-color: var(--win11-surface-elevated);
+  border-bottom: 1px solid var(--win11-border);
+  padding: var(--win11-spacing-2) var(--win11-spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--win11-spacing-2);
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .file-explorer-toolbar {
+  background-color: var(--win11-surface-elevated);
+  border-color: var(--win11-border);
+}
+
+.file-explorer-toolbar-button {
+  padding: var(--win11-spacing-2);
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: var(--win11-radius-sm);
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--win11-text);
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-explorer-toolbar-button:hover {
+  background-color: var(--win11-surface-hover);
+  transform: translateY(-1px);
+}
+
+.file-explorer-toolbar-button:focus-visible {
+  outline: 2px solid var(--win11-accent);
+  outline-offset: 2px;
+}
+
+.file-explorer-toolbar-button:active {
+  transform: translateY(0) scale(0.95);
+  transition-duration: var(--win11-animation-fast);
+}
+
+[data-theme='dark'] .file-explorer-toolbar-button:hover {
+  background-color: var(--win11-surface-hover);
+}
+
+.file-explorer-toolbar-button:disabled {
+  opacity: var(--win11-opacity-50);
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .file-explorer-toolbar-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+.file-explorer-search {
+  flex: 1 1 0%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .file-explorer-search {
+  background-color: #1f2937;
+}
+
+.file-explorer-search-input {
+  flex: 1 1 0%;
+  background-color: transparent;
+  outline: none;
+  font-size: 12px;
+  color: var(--win11-text);
+}
+
+.file-explorer-content {
+  flex: 1 1 0%;
+  overflow: auto;
+  padding: var(--win11-spacing-4);
+  min-height: 0;
+}
+
+.file-explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--win11-spacing-4);
+}
+
+@media (max-width: 768px) {
+  .file-explorer-content {
+    padding: var(--win11-spacing-2);
+  }
+  
+  .file-explorer-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--win11-spacing-2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .file-explorer-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+.file-explorer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.file-explorer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--win11-spacing-2);
+  padding: var(--win11-spacing-4);
+  border-radius: var(--win11-radius-lg);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  background-color: transparent;
+  border: 2px solid transparent;
+  cursor: pointer;
+  color: var(--win11-text);
+  outline: none;
+  position: relative;
+}
+
+.file-explorer-item:hover {
+  background-color: var(--win11-surface-hover);
+  border-color: var(--win11-border);
+  transform: translateY(-2px);
+  box-shadow: var(--win11-elevation-2);
+}
+
+.file-explorer-item:focus-visible {
+  outline: 2px solid var(--win11-accent);
+  outline-offset: 2px;
+  border-color: var(--win11-accent-light);
+}
+
+.file-explorer-item[data-selected='true'] {
+  background-color: var(--win11-accent-light);
+  border-color: var(--win11-accent);
+  box-shadow: var(--win11-elevation-4);
+}
+
+.file-explorer-item[data-selected='true']:hover {
+  background-color: var(--win11-accent-light);
+  border-color: var(--win11-accent-hover);
+}
+
+.file-explorer-item:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: var(--win11-animation-fast);
+}
+
+.file-explorer-item-list {
+  flex-direction: row;
+  width: 100%;
+  padding: 8px;
+  justify-content: flex-start;
+}
+
+.file-explorer-item-name {
+  font: var(--win11-text-xs);
+  font-weight: var(--win11-font-weight-medium);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  color: var(--win11-text);
+  padding: var(--win11-spacing-1);
+  border-radius: var(--win11-radius-sm);
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.file-explorer-item:hover .file-explorer-item-name {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.file-explorer-item[data-selected='true'] .file-explorer-item-name {
+  background-color: rgba(0, 120, 212, 0.3);
+  color: white;
+}
+
+.file-explorer-item-list .file-explorer-item-name {
+  flex: 1 1 0%;
+  text-align: left;
+}
+
+.file-explorer-item-size {
+  font-size: 11px;
+  color: var(--win11-text-secondary);
+}
+
+.file-explorer-item-date {
+  font-size: 11px;
+  color: var(--win11-text-secondary);
+}
+
+.file-explorer-icon-folder {
+  color: #fbbf24;
+}
+
+.file-explorer-icon-text {
+  color: #60a5fa;
+}
+
+.file-explorer-icon-image {
+  color: #4ade80;
+}
+
+.file-explorer-icon-video {
+  color: #f87171;
+}
+
+.file-explorer-icon-audio {
+  color: #a78bfa;
+}
+
+.file-explorer-icon-default {
+  color: #9ca3af;
+}
+

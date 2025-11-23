@@ -12,7 +12,7 @@ interface Command {
   timestamp: number;
 }
 
-const TerminalApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
+const TerminalApp: React.FC<WindowProps> = () => {
   const { isDarkMode } = useTheme();
   const [commands, setCommands] = useState<Command[]>([
     { input: 'Welcome to DurgasOS Terminal', output: '', timestamp: Date.now() },
@@ -23,15 +23,12 @@ const TerminalApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const textColor = isDarkMode ? 'text-green-400' : 'text-green-700';
-  const bgColor = isDarkMode ? 'bg-[#0a0a0a]' : 'bg-[#1e1e1e]';
-  const promptColor = isDarkMode ? 'text-blue-400' : 'text-blue-300';
 
   useEffect(() => {
-    if (isActive && inputRef.current) {
+    if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isActive, commands]);
+  }, [commands]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -124,45 +121,38 @@ const TerminalApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
   };
 
   return (
-    <div className={cn('h-full flex flex-col', bgColor)}>
+    <div className={cn('terminal-container')} data-theme={isDarkMode ? 'dark' : 'light'}>
       {/* Header */}
-      <div className={cn(
-        'h-10 flex items-center gap-2 px-4 border-b shrink-0',
-        isDarkMode ? 'border-white/10 bg-[#1a1a1a]' : 'border-black/10 bg-[#2d2d2d]'
-      )}>
-        <TerminalIcon size={16} className={textColor} />
-        <span className={cn('text-sm font-medium', textColor)}>Terminal</span>
+      <div className="terminal-header">
+        <TerminalIcon size={16} />
+        <span className="terminal-header-title">Terminal</span>
       </div>
 
       {/* Terminal Content */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto p-4 font-mono text-sm win11-scrollbar"
-        style={{ fontFamily: 'Consolas, Monaco, "Courier New", monospace' }}
+        className="terminal-content win11-scrollbar"
       >
         {commands.map((cmd, index) => (
-          <div key={index} className="mb-2">
-            <div className="flex items-center gap-2 mb-1">
-              <span className={promptColor}>durgas-user@durgasos:~$</span>
-              <span className={textColor}>{cmd.input}</span>
+          <div key={index} className="terminal-line">
+            <div className="terminal-prompt">
+              <span>durgas-user@durgasos:~$</span>
+              <span className="terminal-input">{cmd.input}</span>
             </div>
             {cmd.output && (
-              <div className={cn('ml-4', textColor)}>{cmd.output}</div>
+              <div className="terminal-output">{cmd.output}</div>
             )}
           </div>
         ))}
-        <div className="flex items-center gap-2">
-          <span className={promptColor}>durgas-user@durgasos:~$</span>
+        <div className="terminal-prompt">
+          <span>durgas-user@durgasos:~$</span>
           <input
             ref={inputRef}
             type="text"
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className={cn(
-              'flex-1 bg-transparent outline-none',
-              textColor
-            )}
+            className="terminal-input-field"
             autoFocus
           />
         </div>

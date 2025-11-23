@@ -1,0 +1,62 @@
+/**
+ * Boot Screen Component Styles
+ * Styles for the Boot Screen component
+ */
+
+/* ============================================
+   BOOT SCREEN
+   ============================================ */
+
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--win11-animation-slower) var(--win11-easing-ease-in-out);
+  opacity: 0;
+  pointer-events: none;
+  font-family: var(--win11-font-family-base);
+}
+
+.boot-screen-visible {
+  opacity: 1;
+  pointer-events: auto;
+  animation: win11-fade-in var(--win11-animation-slower) var(--win11-easing-ease-in-out);
+}
+
+.boot-screen-logo {
+  margin-bottom: var(--win11-spacing-16);
+  animation: win11-spring var(--win11-animation-slow) var(--win11-easing-spring);
+}
+
+.boot-screen-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: var(--win11-radius-full);
+  animation: win11-spin 1s linear infinite;
+}
+
+.boot-screen-text {
+  margin-top: var(--win11-spacing-6);
+  font: var(--win11-text-sm);
+  color: rgba(255, 255, 255, 0.8);
+  animation: win11-fade-in var(--win11-animation-slow) var(--win11-easing) 0.3s both;
+}
+
+@media (max-width: 768px) {
+  .boot-screen-logo {
+    margin-bottom: var(--win11-spacing-12);
+  }
+  
+  .boot-screen-spinner {
+    width: 32px;
+    height: 32px;
+  }
+}
+

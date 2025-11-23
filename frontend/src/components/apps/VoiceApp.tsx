@@ -4,7 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { WindowProps } from '@/types';
 import { GoogleGenAI, Modality } from '@google/genai';
 import { GEMINI_API_KEY, MODELS } from '@/lib/constants';
-import { Mic, MicOff, Activity, Volume2 } from 'lucide-react';
+import { Mic, MicOff, Activity } from 'lucide-react';
+import { cn } from '@/lib/utils/cn';
 
 const AUDIO_RATE = 24000; 
 
@@ -13,7 +14,9 @@ const VoiceApp: React.FC<WindowProps> = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [status, setStatus] = useState('Ready to connect');
   
-  const sessionRef = useRef<any>(null);
+  // Use the actual Session type from the SDK
+  type LiveSession = Awaited<ReturnType<GoogleGenAI['live']['connect']>>;
+  const sessionRef = useRef<LiveSession | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const processorRef = useRef<ScriptProcessorNode | null>(null);
@@ -26,7 +29,7 @@ const VoiceApp: React.FC<WindowProps> = () => {
       setStatus("Connecting...");
       const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
       
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       const ctx = new AudioContextClass({ sampleRate: AUDIO_RATE });
       audioContextRef.current = ctx;
 
@@ -100,7 +103,8 @@ const VoiceApp: React.FC<WindowProps> = () => {
             },
             onerror: (err) => {
                 console.error('Session error:', err);
-                setStatus("Error: " + (err as Error).message);
+                const errorMessage = err instanceof Error ? err.message : (err as unknown as ErrorEvent).message || 'Unknown error';
+                setStatus("Error: " + errorMessage);
                 setIsConnected(false);
             },
             onclose: () => {
@@ -149,13 +153,9 @@ const VoiceApp: React.FC<WindowProps> = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-[#1f1f1f] text-white items-center justify-center p-8">
-      <div className="text-center space-y-6">
-        <div className={`w-32 h-32 rounded-full flex items-center justify-center transition-all ${
-          isConnected 
-            ? (isMuted ? 'bg-yellow-500' : 'bg-green-500 animate-pulse') 
-            : 'bg-gray-600'
-        }`}>
+    <div className="voice-container">
+      <div className="voice-content">
+        <div className={cn('voice-status-indicator', isConnected && (isMuted ? 'voice-status-indicator-muted' : 'voice-status-indicator-active'), !isConnected && 'voice-status-indicator-disconnected')}>
           {isConnected ? (
             isMuted ? <MicOff size={48} /> : <Mic size={48} />
           ) : (
@@ -163,16 +163,16 @@ const VoiceApp: React.FC<WindowProps> = () => {
           )}
         </div>
         
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Voice Assistant</h2>
-          <p className="text-gray-400">{status}</p>
+        <div className="voice-info">
+          <h2 className="voice-title">Voice Assistant</h2>
+          <p className="voice-status-text">{status}</p>
         </div>
 
-        <div className="flex gap-4">
+        <div className="voice-controls">
           {!isConnected ? (
             <button
               onClick={connectLive}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold"
+              className="voice-button voice-button-connect"
             >
               Connect
             </button>
@@ -180,15 +180,13 @@ const VoiceApp: React.FC<WindowProps> = () => {
             <>
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className={`px-6 py-3 rounded-lg font-semibold ${
-                  isMuted ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'
-                }`}
+                className={cn('voice-button', isMuted ? 'voice-button-mute' : 'voice-button-unmute')}
               >
                 {isMuted ? 'Unmute' : 'Mute'}
               </button>
               <button
                 onClick={disconnect}
-                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold"
+                className="voice-button voice-button-disconnect"
               >
                 Disconnect
               </button>

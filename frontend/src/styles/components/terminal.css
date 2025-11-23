@@ -1,0 +1,151 @@
+/**
+ * Terminal App Styles
+ * Styles for the Terminal application
+ */
+
+/* ============================================
+   TERMINAL APP
+   ============================================ */
+
+.terminal-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #0d1117;
+  color: #16a34a;
+  font-family: var(--win11-font-family-mono);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .terminal-container {
+  background-color: #0d1117;
+  color: #4ade80;
+}
+
+.terminal-header {
+  min-height: 48px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--win11-spacing-2);
+  padding: var(--win11-spacing-2) var(--win11-spacing-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  background-color: #161b22;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme='dark'] .terminal-header {
+  background-color: #161b22;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .terminal-header {
+    min-height: 44px;
+    padding: var(--win11-spacing-2) var(--win11-spacing-3);
+  }
+}
+
+.terminal-header-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #16a34a;
+}
+
+[data-theme='dark'] .terminal-header-title {
+  color: #4ade80;
+}
+
+.terminal-content {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  padding: var(--win11-spacing-4);
+  font-family: var(--win11-font-family-mono);
+  font: var(--win11-text-sm);
+  line-height: var(--win11-line-height-relaxed);
+  min-height: 0;
+  scroll-behavior: smooth;
+}
+
+.terminal-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.terminal-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--win11-radius-full);
+}
+
+.terminal-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.terminal-line {
+  margin-bottom: var(--win11-spacing-2);
+  word-break: break-word;
+  animation: win11-fade-in var(--win11-animation-fast) var(--win11-easing);
+}
+
+.terminal-prompt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: #60a5fa;
+}
+
+[data-theme='dark'] .terminal-prompt {
+  color: #93c5fd;
+}
+
+.terminal-input {
+  color: #16a34a;
+}
+
+[data-theme='dark'] .terminal-input {
+  color: #4ade80;
+}
+
+.terminal-output {
+  margin-left: 16px;
+  color: #16a34a;
+}
+
+[data-theme='dark'] .terminal-output {
+  color: #4ade80;
+}
+
+.terminal-input-field {
+  flex: 1 1 0%;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: #16a34a;
+  font-family: var(--win11-font-family-mono);
+  font: var(--win11-text-sm);
+  caret-color: #16a34a;
+  width: 100%;
+}
+
+.terminal-input-field::selection {
+  background-color: rgba(22, 163, 74, 0.3);
+}
+
+[data-theme='dark'] .terminal-input-field {
+  color: #4ade80;
+  caret-color: #4ade80;
+}
+
+[data-theme='dark'] .terminal-input-field::selection {
+  background-color: rgba(74, 222, 128, 0.3);
+}
+
+@media (max-width: 768px) {
+  .terminal-content {
+    padding: var(--win11-spacing-3);
+    font-size: 13px;
+  }
+}
+

@@ -1,0 +1,41 @@
+/**
+ * Component Styles
+ * Component-scoped CSS classes for all UI components
+ * 
+ * This file imports all modular component stylesheets.
+ * Individual component styles are organized in separate files
+ * within the components/ directory for better maintainability.
+ */
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+@import './components/utilities.css';
+
+/* ============================================
+   OS COMPONENTS
+   ============================================ */
+@import './components/window.css';
+@import './components/taskbar.css';
+@import './components/desktop.css';
+@import './components/action-center.css';
+@import './components/search-panel.css';
+@import './components/widgets.css';
+@import './components/task-view.css';
+@import './components/notifications.css';
+@import './components/boot-screen.css';
+@import './components/snap-layouts.css';
+
+/* ============================================
+   APPLICATIONS
+   ============================================ */
+@import './components/calculator.css';
+@import './components/chat.css';
+@import './components/settings.css';
+@import './components/terminal.css';
+@import './components/notepad.css';
+@import './components/weather.css';
+@import './components/store.css';
+@import './components/voice.css';
+@import './components/studio.css';
+@import './components/file-explorer.css';

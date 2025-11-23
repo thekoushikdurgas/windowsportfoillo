@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { Acrylic } from '@/components/ui/Acrylic';
 import { cn } from '@/lib/utils/cn';
 import { Search, Clock, FileText, Settings as SettingsIcon, Folder, X } from 'lucide-react';
 import { AppDefinition } from '@/types';
@@ -33,19 +32,10 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
   apps,
   onAppClick,
 }) => {
-  const { isDarkMode, accentColor, transparencyEffect } = useTheme();
+  const { isDarkMode, transparencyEffect } = useTheme();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const panelBg = isDarkMode 
-    ? (transparencyEffect ? 'bg-[#202020]/95 backdrop-blur-xl' : 'bg-[#202020]') 
-    : (transparencyEffect ? 'bg-[#f3f3f3]/95 backdrop-blur-xl' : 'bg-[#f3f3f3]');
-    
-  const hoverBg = isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5';
-  const activeBg = isDarkMode ? 'bg-white/10' : 'bg-black/5';
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const mutedText = isDarkMode ? 'text-gray-400' : 'text-gray-500';
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
 
   // Mock recent items
   const recentItems = useMemo(() => [
@@ -170,10 +160,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
 
   return (
     <div
-      className={cn(
-        'fixed inset-0 z-[4000] flex items-start justify-center pt-20',
-        'win11-transition'
-      )}
+      className="search-panel-overlay"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
@@ -181,42 +168,30 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
       }}
     >
       <div
-        className={cn(
-          'w-full max-w-2xl',
-          panelBg,
-          'win11-rounded-panel border shadow-2xl',
-          borderColor,
-          'overflow-hidden'
-        )}
+        className={cn('search-panel-container', 'win11-rounded-panel')}
+        data-transparency={transparencyEffect}
+        data-theme={isDarkMode ? 'dark' : 'light'}
         style={{
           animation: 'win11-menu-slide-down 200ms cubic-bezier(0.1, 0.9, 0.2, 1)',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input */}
-        <div className="p-4 border-b" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }}>
-          <div className={cn(
-            'flex items-center gap-3',
-            'border rounded-lg px-4 py-3',
-            isDarkMode ? 'bg-[#1f1f1f] border-white/10' : 'bg-white border-black/10'
-          )}>
-            <Search size={20} className={mutedText} />
+        <div className="search-panel-input-section" data-theme={isDarkMode ? 'dark' : 'light'}>
+          <div className="search-panel-input-wrapper">
+            <Search size={20} />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type here to search"
-              className={cn(
-                'flex-1 bg-transparent outline-none text-lg',
-                textColor,
-                'placeholder:text-gray-500'
-              )}
+              className="search-panel-input"
               autoFocus
             />
             {query && (
               <button
                 onClick={() => setQuery('')}
-                className={cn('p-1 rounded', hoverBg, textColor)}
+                className="search-panel-clear-button"
               >
                 <X size={18} />
               </button>
@@ -225,57 +200,46 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({
         </div>
 
         {/* Search Results */}
-        <div className="max-h-[400px] overflow-y-auto win11-scrollbar">
+        <div className="search-panel-results win11-scrollbar">
           {searchResults.length > 0 ? (
-            <div className="p-2">
+            <div className="search-panel-results-list">
               {searchResults.map((result, index) => (
                 <button
                   key={result.id}
                   onClick={result.action}
-                  className={cn(
-                    'w-full flex items-center gap-3 p-3 rounded-lg transition text-left',
-                    index === selectedIndex ? activeBg : hoverBg,
-                    textColor
-                  )}
+                  className={cn('search-panel-result-item', index === selectedIndex && 'search-panel-result-item-active')}
                   onMouseEnter={() => setSelectedIndex(index)}
                 >
-                  <div className={cn(
-                    'p-2 rounded-lg',
-                    isDarkMode ? 'bg-white/10' : 'bg-white border border-gray-100'
-                  )}>
+                  <div className="search-panel-result-icon">
                     {result.icon}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={cn('text-sm font-medium truncate', textColor)}>
+                  <div className="search-panel-result-content">
+                    <div className="search-panel-result-title">
                       {result.title}
                     </div>
                     {result.description && (
-                      <div className={cn('text-xs truncate', mutedText)}>
+                      <div className="search-panel-result-description">
                         {result.description}
                       </div>
                     )}
                   </div>
                   {result.type === 'recent' && (
-                    <Clock size={16} className={mutedText} />
+                    <Clock size={16} />
                   )}
                 </button>
               ))}
             </div>
           ) : (
-            <div className={cn('p-8 text-center', mutedText)}>
-              <Search size={48} className="mx-auto mb-4 opacity-50" />
-              <div className="text-sm">No results found</div>
+            <div className="search-panel-empty">
+              <Search size={48} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
+              <div className="search-panel-no-results-text">No results found</div>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className={cn(
-          'p-3 border-t flex items-center justify-between text-xs',
-          borderColor,
-          mutedText
-        )}>
-          <div className="flex items-center gap-4">
+        <div className="search-panel-footer">
+          <div className="search-panel-footer-shortcuts">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>
             <span>Esc Close</span>

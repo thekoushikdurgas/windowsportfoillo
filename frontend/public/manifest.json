@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "fullscreen",
   "orientation": "any",
-  "theme_color": "#0078D4",
+  "theme_color": "#ea580c",
   "background_color": "#FFFFFF",
   "categories": ["productivity", "utilities", "business"],
   "lang": "en",
@@ -86,9 +86,9 @@
       "url": "/?app=explorer",
       "icons": [
         {
-          "src": "/shortcut-explorer.png",
+          "src": "/icons/explorer.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
@@ -99,9 +99,9 @@
       "url": "/?app=settings",
       "icons": [
         {
-          "src": "/shortcut-settings.png",
+          "src": "/icons/settings.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
@@ -112,9 +112,9 @@
       "url": "/?app=assistant",
       "icons": [
         {
-          "src": "/shortcut-assistant.png",
+          "src": "/icons/assistant.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
@@ -125,9 +125,9 @@
       "url": "/?app=notepad",
       "icons": [
         {
-          "src": "/shortcut-notepad.png",
+          "src": "/icons/notepad.svg",
           "sizes": "96x96",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     }

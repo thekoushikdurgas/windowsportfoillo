@@ -24,6 +24,7 @@ Now implement Firebase for the auth flow and storage for my codebase
 
 So now, when the user logs in and signs up completely, create a session or cookie or local storage for the user so next time this user comes so he automatically logs in and signs up. 
 
+can you see the website url http://localhost:3000 in @Browser   , check the design , and modify my design , Learn, understand, and analyse this deeply, and then break your tasks into smaller tasks
 
 Now give me SQL code for inserting User Profiles, contacts.
 

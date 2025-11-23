@@ -4,14 +4,11 @@ import React, { useState } from 'react';
 import { WindowProps } from '@/types';
 import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils/cn';
-import { Cloud, CloudRain, Sun, CloudSun, Droplets, Wind, Thermometer } from 'lucide-react';
+import { Cloud, CloudRain, Sun, CloudSun, Droplets, Wind } from 'lucide-react';
 
-const WeatherApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
+const WeatherApp: React.FC<WindowProps> = () => {
   const { isDarkMode } = useTheme();
 
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const bgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white';
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
 
   // Mock weather data
   const [weather] = useState({
@@ -32,28 +29,24 @@ const WeatherApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
   });
 
   return (
-    <div className={cn('h-full flex flex-col', bgColor, textColor)}>
+    <div className={cn('weather-container')} data-theme={isDarkMode ? 'dark' : 'light'}>
       {/* Current Weather */}
-      <div className={cn(
-        'p-8 border-b',
-        borderColor,
-        'bg-gradient-to-br from-blue-500 to-blue-700'
-      )}>
-        <div className="text-white">
-          <div className="text-sm opacity-90 mb-2">{weather.location}</div>
-          <div className="flex items-center gap-4 mb-4">
-            <div className="text-6xl font-light">{weather.temp}°</div>
-            <div>
-              <div className="text-xl font-medium">{weather.condition}</div>
-              <div className="text-sm opacity-90">H: {weather.high}° L: {weather.low}°</div>
+      <div className="weather-header">
+        <div className="weather-header-content">
+          <div className="weather-location">{weather.location}</div>
+          <div className="weather-main">
+            <div className="weather-temp">{weather.temp}°</div>
+            <div className="weather-info">
+              <div className="weather-condition">{weather.condition}</div>
+              <div className="weather-range">H: {weather.high}° L: {weather.low}°</div>
             </div>
           </div>
-          <div className="flex items-center gap-6 text-sm">
-            <div className="flex items-center gap-2">
+          <div className="weather-details">
+            <div className="weather-detail-item">
               <Droplets size={16} />
               <span>{weather.humidity}%</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="weather-detail-item">
               <Wind size={16} />
               <span>{weather.windSpeed} mph</span>
             </div>
@@ -62,31 +55,26 @@ const WeatherApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
       </div>
 
       {/* Forecast */}
-      <div className="flex-1 overflow-y-auto p-6 win11-scrollbar">
-        <h2 className={cn('text-lg font-semibold mb-4', textColor)}>5-Day Forecast</h2>
-        <div className="space-y-3">
+      <div className="weather-forecast win11-scrollbar">
+        <h2 className="weather-forecast-title">5-Day Forecast</h2>
+        <div className="weather-forecast-list">
           {weather.forecast.map((day, index) => (
             <div
               key={index}
-              className={cn(
-                'flex items-center justify-between p-4 rounded-lg border',
-                borderColor,
-                isDarkMode ? 'bg-[#2d2d2d]' : 'bg-gray-50'
-              )}
+              className="weather-forecast-item"
+              data-theme={isDarkMode ? 'dark' : 'light'}
             >
-              <div className="flex items-center gap-4">
-                <div className={cn('text-blue-400', isDarkMode ? 'text-blue-400' : 'text-blue-600')}>
+              <div className="weather-forecast-left">
+                <div className="weather-forecast-icon" data-theme={isDarkMode ? 'dark' : 'light'}>
                   {day.icon}
                 </div>
                 <div>
-                  <div className={cn('font-medium', textColor)}>{day.day}</div>
-                  <div className={cn('text-sm', isDarkMode ? 'text-gray-400' : 'text-gray-600')}>
-                    {day.condition}
-                  </div>
+                  <div className="weather-forecast-day">{day.day}</div>
+                  <div className="weather-forecast-condition">{day.condition}</div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className={cn('font-medium', textColor)}>
+              <div className="weather-forecast-right">
+                <div className="weather-forecast-temp">
                   {day.high}° / {day.low}°
                 </div>
               </div>

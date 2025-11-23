@@ -1,0 +1,800 @@
+{
+	"info": {
+		"_postman_id": "durgasos-api-collection",
+		"name": "DurgasOS API",
+		"description": "Complete API collection for DurgasOS Backend - FastAPI application with modular architecture.\n\n## Setup Instructions\n1. Import the Development environment file\n2. Update environment variables if needed (base_url, etc.)\n3. Start the backend server: `uvicorn app.main:app --reload`\n4. All endpoints use the base URL: `{{base_url}}/api/v1`\n\n## Modules\n- **Gemini**: AI chat, image/video generation, transcription, TTS\n- **Files**: File management (list, upload, delete)\n- **Settings**: Application settings management\n- **Vector**: Vector database operations\n- **Desktop**: Desktop state management\n- **WebSocket**: Real-time notifications",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Root",
+			"item": [
+				{
+					"name": "Root Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						},
+						"description": "Root endpoint that returns API information and version."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has message and version\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"    pm.expect(jsonData).to.have.property('version');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						},
+						"description": "Health check endpoint to verify API server status."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.eql('healthy');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Root endpoints for API information and health checks."
+		},
+		{
+			"name": "Gemini",
+			"item": [
+				{
+					"name": "Chat",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"history\": [\n        {\n            \"role\": \"user\",\n            \"text\": \"Hello, how are you?\"\n        },\n        {\n            \"role\": \"assistant\",\n            \"text\": \"I'm doing well, thank you! How can I help you today?\"\n        }\n    ],\n    \"message\": \"What is the weather like today?\",\n    \"model\": \"gemini-3-pro-preview\",\n    \"use_thinking\": false,\n    \"use_grounding\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/gemini/chat",
+							"host": ["{{api_base}}"],
+							"path": ["gemini", "chat"]
+						},
+						"description": "Chat endpoint for AI conversations using Gemini models.\n\n**Request Body:**\n- `history`: Array of previous chat messages (role: 'user' or 'assistant', text: message content)\n- `message`: Current user message\n- `model`: Model to use (default: 'gemini-3-pro-preview')\n- `use_thinking`: Enable thinking mode (optional, default: false)\n- `use_grounding`: Enable grounding mode (optional, default: false)\n\n**Response:**\n- `text`: AI response text\n- `grounding_metadata`: Optional grounding metadata if enabled"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has text field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('text');",
+									"    pm.expect(jsonData.text).to.be.a('string');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Generate Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"prompt\": \"A beautiful sunset over mountains with vibrant colors\",\n    \"aspect_ratio\": \"1:1\",\n    \"is_hq\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/gemini/image",
+							"host": ["{{api_base}}"],
+							"path": ["gemini", "image"]
+						},
+						"description": "Generate images using AI based on text prompts.\n\n**Request Body:**\n- `prompt`: Text description of the image to generate (required)\n- `aspect_ratio`: Image aspect ratio (optional, default: '1:1')\n- `is_hq`: High quality flag (optional, default: false)\n\n**Response:**\n- `images`: Array of generated image URLs or base64 strings"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has images array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('images');",
+									"    pm.expect(jsonData.images).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Generate Video",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"prompt\": \"A time-lapse of clouds moving over a city skyline\",\n    \"aspect_ratio\": \"16:9\",\n    \"image_base64\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/gemini/video",
+							"host": ["{{api_base}}"],
+							"path": ["gemini", "video"]
+						},
+						"description": "Generate videos using AI based on text prompts.\n\n**Request Body:**\n- `prompt`: Text description of the video to generate (required)\n- `aspect_ratio`: Video aspect ratio (optional, default: '16:9')\n- `image_base64`: Optional base64 encoded image to use as starting frame\n\n**Response:**\n- `video_url`: URL or path to the generated video"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has video_url field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('video_url');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Transcribe Audio",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"audio_base64\": \"UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQAAAAA=\",\n    \"mime_type\": \"audio/mp3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/gemini/transcribe",
+							"host": ["{{api_base}}"],
+							"path": ["gemini", "transcribe"]
+						},
+						"description": "Transcribe audio to text using AI.\n\n**Request Body:**\n- `audio_base64`: Base64 encoded audio data (required)\n- `mime_type`: Audio MIME type (optional, default: 'audio/mp3')\n\n**Response:**\n- `text`: Transcribed text from the audio"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has text field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('text');",
+									"    pm.expect(jsonData.text).to.be.a('string');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Text to Speech",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"Hello, this is a test of the text to speech functionality.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/gemini/tts",
+							"host": ["{{api_base}}"],
+							"path": ["gemini", "tts"]
+						},
+						"description": "Convert text to speech audio.\n\n**Request Body:**\n- `text`: Text to convert to speech (required)\n\n**Response:**\n- `audio_base64`: Base64 encoded audio data"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has audio_base64 field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('audio_base64');",
+									"    pm.expect(jsonData.audio_base64).to.be.a('string');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Gemini AI module endpoints for chat, image/video generation, transcription, and text-to-speech."
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "List Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/files/?parent_id=c_drive",
+							"host": ["{{api_base}}"],
+							"path": ["files", ""],
+							"query": [
+								{
+									"key": "parent_id",
+									"value": "c_drive",
+									"description": "Parent directory ID (default: 'c_drive')"
+								}
+							]
+						},
+						"description": "List files and directories in the specified parent directory.\n\n**Query Parameters:**\n- `parent_id`: Parent directory ID (optional, default: 'c_drive')\n\n**Response:**\n- `files`: Array of file items with id, name, type, size, date_modified, parent_id"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has files array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('files');",
+									"    pm.expect(jsonData.files).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"description": "File to upload"
+								},
+								{
+									"key": "parent_id",
+									"value": "c_drive",
+									"type": "text",
+									"description": "Parent directory ID (default: 'c_drive')"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_base}}/files/upload?parent_id=c_drive",
+							"host": ["{{api_base}}"],
+							"path": ["files", "upload"],
+							"query": [
+								{
+									"key": "parent_id",
+									"value": "c_drive",
+									"description": "Parent directory ID (default: 'c_drive')"
+								}
+							]
+						},
+						"description": "Upload a file to the specified parent directory.\n\n**Form Data:**\n- `file`: File to upload (required)\n- `parent_id`: Parent directory ID (optional, default: 'c_drive')\n\n**Response:**\n- `file_id`: ID of the uploaded file\n- `filename`: Name of the uploaded file\n- `size`: Size of the file in bytes"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has file_id and filename\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('file_id');",
+									"    pm.expect(jsonData).to.have.property('filename');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Delete File",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/files/:file_id",
+							"host": ["{{api_base}}"],
+							"path": ["files", ":file_id"],
+							"variable": [
+								{
+									"key": "file_id",
+									"value": "",
+									"description": "ID of the file to delete"
+								}
+							]
+						},
+						"description": "Delete a file by its ID.\n\n**Path Parameters:**\n- `file_id`: ID of the file to delete (required)\n\n**Response:**\n- `success`: Boolean indicating if deletion was successful"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 or 404\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"    pm.test(\"Response has success field\", function () {",
+									"        var jsonData = pm.response.json();",
+									"        pm.expect(jsonData).to.have.property('success');",
+									"        pm.expect(jsonData.success).to.be.true;",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "File management endpoints for listing, uploading, and deleting files."
+		},
+		{
+			"name": "Settings",
+			"item": [
+				{
+					"name": "Get Settings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/settings/",
+							"host": ["{{api_base}}"],
+							"path": ["settings", ""]
+						},
+						"description": "Get all application settings.\n\n**Response:**\n- `settings`: Dictionary of all settings (key-value pairs)"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has settings object\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('settings');",
+									"    pm.expect(jsonData.settings).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Update Setting",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": \"theme\",\n    \"value\": \"dark\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/settings/",
+							"host": ["{{api_base}}"],
+							"path": ["settings", ""]
+						},
+						"description": "Update a specific setting.\n\n**Request Body:**\n- `key`: Setting key name (required)\n- `value`: Setting value - can be string, number, boolean, or object (required)\n\n**Response:**\n- `success`: Boolean indicating if update was successful\n\n**Example Settings:**\n- `theme`: 'light' or 'dark'\n- `language`: Language code\n- `notifications_enabled`: true/false"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success');",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Application settings management endpoints."
+		},
+		{
+			"name": "Vector",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"What is machine learning?\",\n    \"n_results\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/vector/search",
+							"host": ["{{api_base}}"],
+							"path": ["vector", "search"]
+						},
+						"description": "Search the vector database for similar documents.\n\n**Request Body:**\n- `query`: Search query text (required)\n- `n_results`: Number of results to return (optional, default: 5)\n\n**Response:**\n- `results`: Array of search results with document content and metadata"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has results array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('results');",
+									"    pm.expect(jsonData.results).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Add Documents",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"documents\": [\n        \"Machine learning is a subset of artificial intelligence.\",\n        \"Deep learning uses neural networks with multiple layers.\",\n        \"Natural language processing enables computers to understand human language.\"\n    ],\n    \"ids\": [\"doc1\", \"doc2\", \"doc3\"],\n    \"metadatas\": [\n        {\"category\": \"AI\", \"source\": \"textbook\"},\n        {\"category\": \"AI\", \"source\": \"textbook\"},\n        {\"category\": \"NLP\", \"source\": \"article\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/vector/add",
+							"host": ["{{api_base}}"],
+							"path": ["vector", "add"]
+						},
+						"description": "Add documents to the vector database for semantic search.\n\n**Request Body:**\n- `documents`: Array of document texts to add (required)\n- `ids`: Optional array of unique IDs for each document\n- `metadatas`: Optional array of metadata objects for each document\n\n**Response:**\n- Success confirmation with document IDs"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Vector database operations for semantic search and document storage."
+		},
+		{
+			"name": "Desktop",
+			"item": [
+				{
+					"name": "Get Desktop State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/desktop/state?user_id=default",
+							"host": ["{{api_base}}"],
+							"path": ["desktop", "state"],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "default",
+									"description": "User ID (default: 'default')"
+								}
+							]
+						},
+						"description": "Get the current desktop state including all window positions and states.\n\n**Query Parameters:**\n- `user_id`: User ID (optional, default: 'default')\n\n**Response:**\n- `windows`: Array of window state objects with id, app_id, title, is_open, is_minimized, is_maximized, z_index, position, size"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has windows array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('windows');",
+									"    pm.expect(jsonData.windows).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Save Desktop State",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"windows\": [\n        {\n            \"id\": \"window-1\",\n            \"app_id\": \"notepad\",\n            \"title\": \"Untitled - Notepad\",\n            \"is_open\": true,\n            \"is_minimized\": false,\n            \"is_maximized\": false,\n            \"z_index\": 1,\n            \"position\": {\n                \"x\": 100,\n                \"y\": 100\n            },\n            \"size\": {\n                \"width\": 800,\n                \"height\": 600\n            }\n        },\n        {\n            \"id\": \"window-2\",\n            \"app_id\": \"browser\",\n            \"title\": \"Browser\",\n            \"is_open\": true,\n            \"is_minimized\": false,\n            \"is_maximized\": true,\n            \"z_index\": 2,\n            \"position\": {\n                \"x\": 0,\n                \"y\": 0\n            },\n            \"size\": {\n                \"width\": 1920,\n                \"height\": 1080\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/desktop/state?user_id=default",
+							"host": ["{{api_base}}"],
+							"path": ["desktop", "state"],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "default",
+									"description": "User ID (default: 'default')"
+								}
+							]
+						},
+						"description": "Save the desktop state including all window positions and states.\n\n**Query Parameters:**\n- `user_id`: User ID (optional, default: 'default')\n\n**Request Body:**\n- `windows`: Array of window state objects, each containing:\n  - `id`: Window ID (required)\n  - `app_id`: Application ID (required)\n  - `title`: Window title (required)\n  - `is_open`: Whether window is open (required)\n  - `is_minimized`: Whether window is minimized (required)\n  - `is_maximized`: Whether window is maximized (required)\n  - `z_index`: Z-index for window layering (required)\n  - `position`: Object with x, y coordinates (required)\n  - `size`: Object with width, height (required)\n\n**Response:**\n- `success`: Boolean indicating if save was successful"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success field\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success');",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Desktop state management endpoints for saving and retrieving window configurations."
+		},
+		{
+			"name": "WebSocket",
+			"item": [
+				{
+					"name": "WebSocket Connection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ws_url}}",
+							"host": ["{{ws_url}}"],
+							"path": [""]
+						},
+						"description": "WebSocket endpoint for real-time notifications.\n\n**Connection URL:** `{{ws_url}}` (typically `ws://localhost:8000/ws`)\n\n**Message Format:**\nTo send a notification, send a JSON message:\n```json\n{\n    \"type\": \"send_notification\",\n    \"data\": {\n        \"title\": \"Notification Title\",\n        \"message\": \"Notification message content\",\n        \"app_name\": \"App Name\" (optional),\n        \"duration\": 5000 (optional, milliseconds)\n    }\n}\n```\n\n**Note:** Postman supports WebSocket connections. Use the WebSocket request type to connect.\n\n**Example Messages:**\n1. **Connection Test:** Just connect to verify the WebSocket is working\n2. **Send Notification:**\n```json\n{\n    \"type\": \"send_notification\",\n    \"data\": {\n        \"title\": \"New Message\",\n        \"message\": \"You have a new message\",\n        \"app_name\": \"Messenger\",\n        \"duration\": 5000\n    }\n}\n```"
+					},
+					"response": []
+				}
+			],
+			"description": "WebSocket endpoint for real-time notifications. Connect to receive and send notification messages."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "api_version",
+			"value": "v1",
+			"type": "string"
+		}
+	]
+}
+

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { WindowProps } from '@/types';
 import { useTheme } from '@/context/ThemeContext';
-import { Folder, FileText, Image as ImageIcon, Music, Video, ChevronLeft, ChevronRight, ArrowUp, Search, Home } from 'lucide-react';
+import { Folder, FileText, Image as ImageIcon, Music, Video, ChevronLeft, ChevronRight, Search, Home } from 'lucide-react';
 
 type FileType = 'folder' | 'text' | 'image' | 'video' | 'audio' | 'unknown' | 'drive';
 
@@ -16,7 +16,7 @@ interface FileSystemItem {
   dateModified: string;
 }
 
-let fsItems: FileSystemItem[] = [
+const fsItems: FileSystemItem[] = [
   { id: 'root', parentId: null, name: 'This PC', type: 'folder', dateModified: '', size: '' },
   { id: 'c_drive', parentId: 'root', name: 'Local Disk (C:)', type: 'drive', dateModified: '', size: '800 GB free' },
   { id: 'desktop', parentId: 'c_drive', name: 'Desktop', type: 'folder', dateModified: 'Today', size: '' },
@@ -28,30 +28,22 @@ let fsItems: FileSystemItem[] = [
 ];
 
 const FileExplorerApp: React.FC<WindowProps> = () => {
-  const { isDarkMode, accentColor } = useTheme();
+  const { isDarkMode } = useTheme();
   
   const [currentPath, setCurrentPath] = useState<string>('c_drive');
   const [history, setHistory] = useState<string[]>(['c_drive']);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
-  const bg = isDarkMode ? 'bg-[#191919]' : 'bg-[#f3f3f3]';
-  const mainBg = isDarkMode ? 'bg-[#202020]' : 'bg-white';
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const mutedText = isDarkMode ? 'text-gray-400' : 'text-gray-500';
-  const borderColor = isDarkMode ? 'border-[#333]' : 'border-[#e5e5e5]';
-
-  const currentFolder = fsItems.find(i => i.id === currentPath);
+  const [viewMode] = useState<'grid' | 'list'>('grid');
   const items = fsItems.filter(i => i.parentId === currentPath);
 
   const getIcon = (type: FileType) => {
     switch (type) {
-      case 'folder': return <Folder className="text-yellow-400" size={24} />;
-      case 'text': return <FileText className="text-blue-400" size={24} />;
-      case 'image': return <ImageIcon className="text-green-400" size={24} />;
-      case 'video': return <Video className="text-red-400" size={24} />;
-      case 'audio': return <Music className="text-purple-400" size={24} />;
-      default: return <FileText className="text-gray-400" size={24} />;
+      case 'folder': return <Folder className="file-explorer-icon-folder" size={24} />;
+      case 'text': return <FileText className="file-explorer-icon-text" size={24} />;
+      case 'image': return <ImageIcon className="file-explorer-icon-image" size={24} />;
+      case 'video': return <Video className="file-explorer-icon-video" size={24} />;
+      case 'audio': return <Music className="file-explorer-icon-audio" size={24} />;
+      default: return <FileText className="file-explorer-icon-default" size={24} />;
     }
   };
 
@@ -81,53 +73,53 @@ const FileExplorerApp: React.FC<WindowProps> = () => {
   };
 
   return (
-    <div className={`flex flex-col h-full ${bg} ${textColor}`}>
-      <div className={`${mainBg} border-b ${borderColor} p-2 flex items-center gap-2`}>
-        <button onClick={goBack} disabled={historyIndex === 0} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50">
+    <div className="file-explorer-container" data-theme={isDarkMode ? 'dark' : 'light'}>
+      <div className="file-explorer-toolbar" data-theme={isDarkMode ? 'dark' : 'light'}>
+        <button onClick={goBack} disabled={historyIndex === 0} className="file-explorer-toolbar-button" aria-label="Go back" title="Go back">
           <ChevronLeft size={20} />
         </button>
-        <button onClick={goForward} disabled={historyIndex === history.length - 1} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50">
+        <button onClick={goForward} disabled={historyIndex === history.length - 1} className="file-explorer-toolbar-button" aria-label="Go forward" title="Go forward">
           <ChevronRight size={20} />
         </button>
-        <button onClick={() => navigateTo('c_drive')} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+        <button onClick={() => navigateTo('c_drive')} className="file-explorer-toolbar-button" aria-label="Go to home" title="Go to home">
           <Home size={20} />
         </button>
-        <div className="flex-1 flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded">
-          <Search size={16} className={mutedText} />
+        <div className="file-explorer-search">
+          <Search size={16} />
           <input 
             type="text" 
             placeholder="Search..." 
-            className="flex-1 bg-transparent outline-none text-sm"
+            className="file-explorer-search-input"
           />
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-4">
+      <div className="file-explorer-content">
         {viewMode === 'grid' ? (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="file-explorer-grid">
             {items.map(item => (
               <button
                 key={item.id}
                 onClick={() => item.type === 'folder' || item.type === 'drive' ? navigateTo(item.id) : null}
-                className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-white/5 transition"
+                className="file-explorer-item file-explorer-item-grid"
               >
                 {getIcon(item.type)}
-                <span className="text-xs text-center truncate w-full">{item.name}</span>
+                <span className="file-explorer-item-name">{item.name}</span>
               </button>
             ))}
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="file-explorer-list">
             {items.map(item => (
               <button
                 key={item.id}
                 onClick={() => item.type === 'folder' || item.type === 'drive' ? navigateTo(item.id) : null}
-                className="w-full flex items-center gap-3 p-2 rounded hover:bg-white/5 transition"
+                className="file-explorer-item file-explorer-item-list"
               >
                 {getIcon(item.type)}
-                <span className="flex-1 text-left">{item.name}</span>
-                <span className={mutedText}>{item.size}</span>
-                <span className={mutedText}>{item.dateModified}</span>
+                <span className="file-explorer-item-name">{item.name}</span>
+                <span className="file-explorer-item-size">{item.size}</span>
+                <span className="file-explorer-item-date">{item.dateModified}</span>
               </button>
             ))}
           </div>

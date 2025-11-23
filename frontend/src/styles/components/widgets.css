@@ -1,0 +1,240 @@
+/**
+ * Widgets Component Styles
+ * Styles for the Widgets component
+ */
+
+/* ============================================
+   WIDGETS
+   ============================================ */
+
+.widgets-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: var(--viewport-height, 100vh);
+  max-height: var(--viewport-height, 100vh);
+  width: 400px;
+  max-width: calc(var(--viewport-width, 100vw) - var(--win11-spacing-4));
+  z-index: 3000;
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  background-color: var(--win11-bg);
+  border-right: 1px solid;
+  box-shadow: var(--win11-shadow-2xl);
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .widgets-container {
+  background-color: var(--win11-bg);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.widgets-container[data-transparency='true'] {
+  background-color: rgba(32, 32, 32, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+[data-theme='dark'] .widgets-container[data-transparency='true'] {
+  background-color: rgba(32, 32, 32, 0.95);
+}
+
+.widgets-container[data-open='true'] {
+  transform: translateX(0);
+}
+
+.widgets-inner {
+  height: var(--viewport-height, 100vh);
+  max-height: var(--viewport-height, 100vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.widgets-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid;
+  flex-shrink: 0;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .widgets-header {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.widgets-header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--win11-text);
+}
+
+.widgets-header-close {
+  padding: 8px;
+  border-radius: 8px;
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--win11-text);
+}
+
+.widgets-header-close:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .widgets-header-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.widgets-content {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.widget-card {
+  padding: var(--win11-spacing-4);
+  border-radius: var(--win11-radius-card);
+  border: 1px solid var(--win11-border);
+  background-color: var(--win11-surface-elevated);
+  box-shadow: var(--win11-elevation-2);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+}
+
+.widget-card:hover {
+  box-shadow: var(--win11-elevation-4);
+  border-color: var(--win11-border-strong);
+  transform: translateY(-2px);
+}
+
+[data-theme='dark'] .widget-card {
+  border-color: var(--win11-border);
+  background-color: var(--win11-surface-elevated);
+}
+
+.widget-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.widget-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--win11-text);
+}
+
+.widget-weather-temp {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.widget-weather-info {
+  flex: 1 1 0%;
+}
+
+.widget-weather-condition {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--win11-text);
+}
+
+.widget-weather-location {
+  font-size: 11px;
+  color: var(--win11-text-secondary);
+}
+
+.widget-weather-range {
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--win11-text-secondary);
+}
+
+.widget-calendar-date {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--win11-text);
+}
+
+.widget-calendar-day {
+  font-size: 11px;
+  color: var(--win11-text-secondary);
+}
+
+.widget-stock-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.widget-stock-symbol {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--win11-text);
+}
+
+.widget-stock-name {
+  font-size: 11px;
+  color: var(--win11-text-secondary);
+}
+
+.widget-stock-price {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--win11-text);
+}
+
+.widget-stock-change {
+  font-size: 11px;
+}
+
+.widget-stock-change-positive {
+  color: #16a34a;
+}
+
+.widget-stock-change-negative {
+  color: #ef4444;
+}
+
+.widget-news-item {
+  padding-bottom: 12px;
+  border-bottom: 1px solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+}
+
+[data-theme='dark'] .widget-news-item {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.widget-news-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.widget-news-title {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--win11-text);
+}
+
+.widget-news-meta {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--win11-text-secondary);
+}
+

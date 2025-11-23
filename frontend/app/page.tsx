@@ -8,7 +8,7 @@ export default function Home() {
   const [booted, setBooted] = useState(false);
 
   return (
-    <main className="h-screen w-screen overflow-hidden">
+    <main className="viewport-container">
       {!booted && <BootScreen onComplete={() => setBooted(true)} />}
       {booted && <Desktop />}
     </main>

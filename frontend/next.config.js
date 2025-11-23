@@ -15,6 +15,7 @@ const nextConfig = {
     // Turbopack can be enabled for faster dev builds
     // turbo: {},
   },
+  devIndicators: false,
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
     NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000/ws',

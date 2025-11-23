@@ -6,18 +6,13 @@ import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils/cn';
 import { Calculator as CalculatorIcon } from 'lucide-react';
 
-const CalculatorApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
+const CalculatorApp: React.FC<WindowProps> = () => {
   const { isDarkMode } = useTheme();
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [waitingForNewValue, setWaitingForNewValue] = useState(false);
 
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const bgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white';
-  const buttonBg = isDarkMode ? 'bg-[#2d2d2d] hover:bg-[#3d3d3d]' : 'bg-gray-100 hover:bg-gray-200';
-  const buttonBgAccent = isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600';
-  const buttonBgOperator = isDarkMode ? 'bg-[#383838] hover:bg-[#484848]' : 'bg-gray-200 hover:bg-gray-300';
 
   const inputNumber = (num: string) => {
     if (waitingForNewValue) {
@@ -99,9 +94,9 @@ const CalculatorApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
     <button
       onClick={onClick}
       className={cn(
-        'h-16 rounded-lg font-semibold text-lg transition',
+        'calculator-button',
         className,
-        `col-span-${colSpan}`
+        colSpan === 2 && 'calculator-button-col-span-2'
       )}
     >
       {children}
@@ -109,84 +104,80 @@ const CalculatorApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
   );
 
   return (
-    <div className={cn('h-full flex flex-col', bgColor, textColor)}>
-      <div className="p-6 flex-1 flex flex-col">
-        <div className="flex items-center gap-2 mb-6">
+    <div className={cn('calculator-container')} data-theme={isDarkMode ? 'dark' : 'light'}>
+      <div className="calculator-content">
+        <div className="calculator-header">
           <CalculatorIcon size={24} />
-          <h1 className="text-xl font-semibold">Calculator</h1>
+          <h1 className="calculator-title">Calculator</h1>
         </div>
 
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="calculator-body">
           {/* Display */}
-          <div className={cn(
-            'h-20 rounded-lg p-4 flex items-end justify-end text-right text-3xl font-light',
-            isDarkMode ? 'bg-[#0a0a0a]' : 'bg-gray-50',
-            'overflow-hidden'
-          )}>
+          <div className="calculator-display">
             {display}
           </div>
 
           {/* Buttons */}
-          <div className="grid grid-cols-4 gap-3 flex-1">
-            <Button onClick={clear} className={buttonBg}>
+          <div className="calculator-buttons">
+            <Button onClick={clear}>
               AC
             </Button>
-            <Button onClick={() => setDisplay(String(-parseFloat(display)))} className={buttonBg}>
+            <Button onClick={() => setDisplay(String(-parseFloat(display)))}>
               +/-
             </Button>
-            <Button onClick={() => inputOperation('%')} className={buttonBg}>
+            <Button onClick={() => inputOperation('%')}>
               %
             </Button>
-            <Button onClick={() => inputOperation('÷')} className={cn(buttonBgOperator, textColor)}>
+            <Button onClick={() => inputOperation('÷')} className="calculator-button-operator">
               ÷
             </Button>
 
-            <Button onClick={() => inputNumber('7')} className={buttonBg}>
+            <Button onClick={() => inputNumber('7')}>
               7
             </Button>
-            <Button onClick={() => inputNumber('8')} className={buttonBg}>
+            <Button onClick={() => inputNumber('8')}>
               8
             </Button>
-            <Button onClick={() => inputNumber('9')} className={buttonBg}>
+            <Button onClick={() => inputNumber('9')}>
               9
             </Button>
-            <Button onClick={() => inputOperation('×')} className={cn(buttonBgOperator, textColor)}>
+            <Button onClick={() => inputOperation('×')} className="calculator-button-operator">
               ×
             </Button>
 
-            <Button onClick={() => inputNumber('4')} className={buttonBg}>
+            <Button onClick={() => inputNumber('4')}>
               4
             </Button>
-            <Button onClick={() => inputNumber('5')} className={buttonBg}>
+            <Button onClick={() => inputNumber('5')}>
               5
             </Button>
-            <Button onClick={() => inputNumber('6')} className={buttonBg}>
+            <Button onClick={() => inputNumber('6')}>
               6
             </Button>
-            <Button onClick={() => inputOperation('-')} className={cn(buttonBgOperator, textColor)}>
+            <Button onClick={() => inputOperation('-')} className="calculator-button-operator">
               -
             </Button>
 
-            <Button onClick={() => inputNumber('1')} className={buttonBg}>
+            <Button onClick={() => inputNumber('1')}>
               1
             </Button>
-            <Button onClick={() => inputNumber('2')} className={buttonBg}>
+            <Button onClick={() => inputNumber('2')}>
               2
             </Button>
-            <Button onClick={() => inputNumber('3')} className={buttonBg}>
+            <Button onClick={() => inputNumber('3')}>
               3
             </Button>
-            <Button onClick={() => inputOperation('+')} className={cn(buttonBgOperator, textColor)}>
+            <Button onClick={() => inputOperation('+')} className="calculator-button-operator">
               +
             </Button>
 
-            <Button onClick={() => inputNumber('0')} className={buttonBg} colSpan={2}>
+            <Button onClick={() => inputNumber('0')} colSpan={2}>
               0
             </Button>
-            <Button onClick={inputDecimal} className={buttonBg}>
+            <Button onClick={inputDecimal}>
               .
             </Button>
-            <Button onClick={performCalculation} className={cn(buttonBgAccent, 'text-white')}>
+            <Button onClick={performCalculation} className="calculator-button-accent">
               =
             </Button>
           </div>

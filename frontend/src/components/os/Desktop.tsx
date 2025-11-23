@@ -18,6 +18,7 @@ import WeatherApp from '../apps/WeatherApp';
 import { useTheme } from '@/context/ThemeContext';
 import { useNotification } from '@/context/NotificationContext';
 import NotificationContainer from './NotificationContainer';
+import { SnapZone } from '@/lib/windows11';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import SearchPanel from './SearchPanel';
 import Widgets from './Widgets';
@@ -185,7 +186,7 @@ const Desktop: React.FC = () => {
     setWindows(prev => prev.map(w => w.id === id ? { ...w, ...updates } : w));
   };
 
-  const handleSnap = (windowId: string, zone: { layout: string; x: number; y: number; width: number; height: number }) => {
+  const handleSnap = (windowId: string, zone: SnapZone) => {
     setWindows(prev => prev.map(w => 
       w.id === windowId 
         ? { 
@@ -193,7 +194,7 @@ const Desktop: React.FC = () => {
             position: { x: zone.x, y: zone.y },
             size: { width: zone.width, height: zone.height },
             isSnapped: true,
-            snapState: { layout: zone.layout as any, zone: zone.layout },
+            snapState: { layout: zone.layout, zone: zone.id },
             animationState: 'snapping' as const
           }
         : w
@@ -285,12 +286,16 @@ const Desktop: React.FC = () => {
         if (activeWindowId) {
           const win = windows.find(w => w.id === activeWindowId);
           if (win && !win.isMaximized) {
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+            const taskbarHeight = 48;
             handleSnap(win.id, {
+              id: `left-${win.id}`,
               layout: 'left',
               x: 0,
               y: 0,
-              width: window.innerWidth / 2,
-              height: window.innerHeight - 48,
+              width: Math.min(viewportWidth / 2, viewportWidth),
+              height: Math.min(viewportHeight - taskbarHeight, viewportHeight - taskbarHeight),
             });
           }
         }
@@ -304,12 +309,16 @@ const Desktop: React.FC = () => {
         if (activeWindowId) {
           const win = windows.find(w => w.id === activeWindowId);
           if (win && !win.isMaximized) {
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+            const taskbarHeight = 48;
             handleSnap(win.id, {
+              id: `right-${win.id}`,
               layout: 'right',
-              x: window.innerWidth / 2,
+              x: Math.min(viewportWidth / 2, viewportWidth),
               y: 0,
-              width: window.innerWidth / 2,
-              height: window.innerHeight - 48,
+              width: Math.min(viewportWidth / 2, viewportWidth),
+              height: Math.min(viewportHeight - taskbarHeight, viewportHeight - taskbarHeight),
             });
           }
         }
@@ -349,22 +358,22 @@ const Desktop: React.FC = () => {
 
   return (
     <div 
-      className="h-screen w-screen overflow-hidden relative bg-cover bg-center transition-all duration-500 ease-in-out"
+      className="desktop-container"
       style={{ backgroundImage: `url(${wallpaperUrl})` }}
       onClick={() => setStartOpen(false)}
     >
       {/* Desktop Icons */}
-      <div className="absolute top-0 left-0 p-4 flex flex-col gap-4">
+      <div className="desktop-icons">
         {APPS.map(app => (
           <div 
             key={app.id}
-            className="w-20 h-24 flex flex-col items-center justify-center gap-1 hover:bg-white/10 rounded border border-transparent hover:border-white/20 transition cursor-pointer text-shadow group"
+            className="desktop-icon"
             onClick={(e) => { e.stopPropagation(); openApp(app.id, { forceNew: e.shiftKey }); }}
           >
-            <div className="p-2 bg-white/10 rounded-lg shadow-lg group-hover:scale-105 transition">
-              {React.cloneElement(app.icon as React.ReactElement<any>, { size: 32 })}
+            <div className="desktop-icon-image">
+              {React.cloneElement(app.icon as React.ReactElement<{ size?: number }>, { size: 32 })}
             </div>
-            <span className="text-xs text-white text-center font-medium drop-shadow-md">{app.title}</span>
+            <span className="desktop-icon-title">{app.title}</span>
           </div>
         ))}
       </div>

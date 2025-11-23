@@ -2,8 +2,8 @@ import { GoogleGenAI, Modality } from "@google/genai";
 import { MODELS, GEMINI_API_KEY } from "@/lib/constants";
 
 export const getGenAI = async (forceUserKey = false) => {
-  let key = GEMINI_API_KEY;
-  if (forceUserKey && typeof window !== 'undefined' && (window as any).aistudio) {
+  const key = GEMINI_API_KEY;
+  if (forceUserKey && typeof window !== 'undefined' && (window as { aistudio?: unknown }).aistudio) {
      // In a real scenario, the key is injected by the environment
   }
   return new GoogleGenAI({ apiKey: key });
@@ -18,7 +18,7 @@ export const generateChatResponse = async (
 ) => {
   const ai = await getGenAI();
   
-  const tools: any[] = [];
+  const tools: Array<{ googleSearch?: Record<string, never>; googleMaps?: Record<string, never> }> = [];
   if (useGrounding) {
     tools.push({ googleSearch: {} });
     if (!model.includes('gemini-3-pro')) {
@@ -26,7 +26,7 @@ export const generateChatResponse = async (
     }
   }
 
-  const config: any = {
+  const config: { tools?: typeof tools; thinkingConfig?: { thinkingBudget: number } } = {
     tools: tools.length > 0 ? tools : undefined,
   };
 
@@ -123,7 +123,7 @@ export const generateVideo = async (prompt: string, aspectRatio: string = "16:9"
       },
       config: {
         numberOfVideos: 1,
-        aspectRatio: aspectRatio as any,
+        aspectRatio: aspectRatio as '16:9' | '9:16' | '1:1' | '4:3' | '3:4',
         resolution: '720p'
       }
     });
@@ -133,7 +133,7 @@ export const generateVideo = async (prompt: string, aspectRatio: string = "16:9"
       prompt,
       config: {
         numberOfVideos: 1,
-        aspectRatio: aspectRatio as any,
+        aspectRatio: aspectRatio as '16:9' | '9:16' | '1:1' | '4:3' | '3:4',
         resolution: '720p'
       }
     });

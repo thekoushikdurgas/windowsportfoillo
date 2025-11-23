@@ -1,0 +1,153 @@
+/**
+ * Weather App Styles
+ * Styles for the Weather application
+ */
+
+/* ============================================
+   WEATHER APP
+   ============================================ */
+
+.weather-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+  font-family: var(--win11-font-family-base);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .weather-container {
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+}
+
+.weather-header {
+  padding: 32px;
+  border-bottom: 1px solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom right, #3b82f6, #1d4ed8);
+}
+
+[data-theme='dark'] .weather-header {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.weather-header-content {
+  color: white;
+}
+
+.weather-location {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.weather-temp {
+  font-size: 60px;
+  font-weight: 300;
+}
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-condition {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.weather-range {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.weather-details {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 12px;
+}
+
+.weather-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-forecast {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.weather-forecast-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--win11-text);
+}
+
+.weather-forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weather-forecast-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb;
+}
+
+[data-theme='dark'] .weather-forecast-item {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: #2d2d2d;
+}
+
+.weather-forecast-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.weather-forecast-icon {
+  color: #60a5fa;
+}
+
+[data-theme='dark'] .weather-forecast-icon {
+  color: #60a5fa;
+}
+
+.weather-forecast-day {
+  font-weight: 500;
+  color: var(--win11-text);
+}
+
+.weather-forecast-condition {
+  font-size: 12px;
+  color: var(--win11-text-secondary);
+}
+
+.weather-forecast-right {
+  text-align: right;
+}
+
+.weather-forecast-temp {
+  font-weight: 500;
+  color: var(--win11-text);
+}
+

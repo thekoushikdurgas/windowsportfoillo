@@ -1,0 +1,217 @@
+/**
+ * Window Component Styles
+ * Enhanced styles for the Window component with modern design
+ */
+
+/* ============================================
+   WINDOW COMPONENT
+   ============================================ */
+
+.window-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--win11-border);
+  border-radius: var(--win11-radius-window);
+  box-shadow: var(--win11-elevation-16);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+  min-width: 200px;
+  min-height: 150px;
+  max-width: var(--viewport-width, 100vw);
+  max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height, 48px));
+  animation: win11-window-open var(--win11-animation-normal) var(--win11-easing);
+}
+
+[data-theme='dark'] .window-container {
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+  border-color: var(--win11-border);
+}
+
+.window-container[data-active='true'] {
+  box-shadow: var(--win11-elevation-24);
+  border-color: var(--win11-border-strong);
+  z-index: 100;
+}
+
+.window-container[data-active='false'] {
+  opacity: var(--win11-opacity-95);
+  z-index: 10;
+}
+
+.window-container[data-maximized='true'] {
+  border-radius: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: var(--taskbar-height, 48px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: calc(100% - var(--taskbar-height, 48px)) !important;
+  max-height: calc(100% - var(--taskbar-height, 48px)) !important;
+  animation: win11-window-maximize var(--win11-animation-normal) var(--win11-easing);
+}
+
+.window-container[data-maximized='false'] {
+  animation: win11-window-restore var(--win11-animation-normal) var(--win11-easing);
+}
+
+/* Responsive Window */
+@media (max-width: 768px) {
+  .window-container {
+    border-radius: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }
+  
+  .window-container[data-maximized='true'] {
+    animation: none;
+  }
+}
+
+.window-titlebar {
+  height: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  flex-shrink: 0;
+  background-color: var(--win11-surface);
+  padding: 0;
+  border-bottom: 1px solid var(--win11-border-subtle);
+  transition: background-color var(--win11-animation-normal) var(--win11-easing);
+}
+
+[data-theme='dark'] .window-titlebar {
+  background-color: var(--win11-surface);
+  border-bottom-color: var(--win11-border-subtle);
+}
+
+.window-titlebar[data-transparency='true'] {
+  background-color: rgba(45, 45, 45, 0.85);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+}
+
+[data-theme='dark'] .window-titlebar[data-transparency='true'] {
+  background-color: rgba(45, 45, 45, 0.85);
+}
+
+.window-titlebar-content {
+  display: flex;
+  align-items: center;
+  gap: var(--win11-spacing-3);
+  padding: 0 var(--win11-spacing-4);
+  pointer-events: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.window-titlebar-title {
+  font: var(--win11-text-xs);
+  font-weight: var(--win11-font-weight-medium);
+  color: var(--win11-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.window-titlebar-controls {
+  display: flex;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.window-titlebar-button {
+  padding: 0 var(--win11-spacing-4);
+  min-width: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--win11-text);
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
+  position: relative;
+}
+
+.window-titlebar-button:hover {
+  background-color: var(--win11-surface-hover);
+}
+
+.window-titlebar-button:focus-visible {
+  outline: 2px solid var(--win11-accent);
+  outline-offset: -2px;
+}
+
+.window-titlebar-button:active {
+  background-color: var(--win11-surface-active);
+  transform: scale(0.95);
+}
+
+[data-theme='dark'] .window-titlebar-button:hover {
+  background-color: var(--win11-surface-hover);
+}
+
+.window-titlebar-button-close:hover {
+  background-color: var(--win11-error) !important;
+  color: white !important;
+}
+
+.window-titlebar-button-close:active {
+  background-color: var(--win11-error-active) !important;
+}
+
+.window-content {
+  flex: 1 1 0%;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--win11-surface);
+  min-height: 0;
+}
+
+.window-resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+  z-index: 50;
+  background: linear-gradient(135deg, transparent 0%, transparent 40%, var(--win11-border) 40%, var(--win11-border) 45%, transparent 45%, transparent 100%);
+  transition: opacity var(--win11-animation-fast) var(--win11-easing);
+  opacity: 0;
+}
+
+.window-container:hover .window-resize-handle {
+  opacity: 1;
+}
+
+.window-container[data-maximized='true'] .window-resize-handle {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .window-titlebar {
+    height: 48px;
+    min-height: 48px;
+  }
+  
+  .window-titlebar-button {
+    min-width: 48px;
+    padding: 0 var(--win11-spacing-4);
+  }
+  
+  .window-resize-handle {
+    width: 20px;
+    height: 20px;
+  }
+}
+

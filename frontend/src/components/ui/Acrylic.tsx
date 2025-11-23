@@ -63,8 +63,11 @@ export const Acrylic: React.FC<AcrylicProps> = ({
       className={cn(
         'win11-acrylic',
         isDark ? 'win11-acrylic-dark' : 'win11-acrylic-light',
+        'acrylic-container',
         className
       )}
+      data-dark={isDark}
+      data-preset={effectivePreset}
       style={{
         ...acrylicStyles,
         ...style,

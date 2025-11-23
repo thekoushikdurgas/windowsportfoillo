@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { Acrylic } from '@/components/ui/Acrylic';
 import { cn } from '@/lib/utils/cn';
-import { Cloud, CloudRain, Sun, Calendar, TrendingUp, Newspaper, X } from 'lucide-react';
-import { BORDER_RADIUS } from '@/lib/windows11';
+import { Calendar, TrendingUp, Newspaper, X, Cloud } from 'lucide-react';
 
 interface WidgetsProps {
   isOpen: boolean;
@@ -19,14 +17,6 @@ interface WidgetsProps {
 export const Widgets: React.FC<WidgetsProps> = ({ isOpen, onClose }) => {
   const { isDarkMode, accentColor, transparencyEffect } = useTheme();
 
-  const panelBg = isDarkMode 
-    ? (transparencyEffect ? 'bg-[#202020]/95 backdrop-blur-xl' : 'bg-[#202020]') 
-    : (transparencyEffect ? 'bg-[#f3f3f3]/95 backdrop-blur-xl' : 'bg-[#f3f3f3]');
-    
-  const hoverBg = isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5';
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const mutedText = isDarkMode ? 'text-gray-400' : 'text-gray-500';
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
 
   // Mock data
   const [weather] = useState({
@@ -38,7 +28,7 @@ export const Widgets: React.FC<WidgetsProps> = ({ isOpen, onClose }) => {
   });
 
   const [stocks] = useState([
-    { symbol: 'MSFT', name: 'Microsoft', price: 378.85, change: 2.34, changePercent: 0.62 },
+    { symbol: 'DURG', name: 'DurgasOS', price: 125.50, change: 3.25, changePercent: 2.66 },
     { symbol: 'AAPL', name: 'Apple', price: 175.43, change: -1.23, changePercent: -0.70 },
     { symbol: 'GOOGL', name: 'Alphabet', price: 142.56, change: 0.89, changePercent: 0.63 },
   ]);
@@ -53,58 +43,43 @@ export const Widgets: React.FC<WidgetsProps> = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={cn(
-        'fixed left-0 top-0 h-full w-[400px] z-[3000]',
-        'win11-transition',
-        panelBg,
-        'border-r shadow-2xl',
-        borderColor,
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      )}
+      className={cn('widgets-container', 'win11-transition')}
+      data-open={isOpen}
+      data-transparency={transparencyEffect}
+      data-theme={isDarkMode ? 'dark' : 'light'}
       style={{
         animation: isOpen ? 'win11-menu-slide-left 200ms cubic-bezier(0.1, 0.9, 0.2, 1)' : undefined,
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="h-full flex flex-col overflow-hidden">
+      <div className="widgets-inner">
         {/* Header */}
-        <div className={cn(
-          'flex items-center justify-between p-4 border-b shrink-0',
-          borderColor
-        )}>
-          <h2 className={cn('text-lg font-semibold', textColor)}>Widgets</h2>
+        <div className="widgets-header">
+          <h2 className="widgets-header-title">Widgets</h2>
           <button
             onClick={onClose}
-            className={cn(
-              'p-2 rounded-lg transition',
-              hoverBg,
-              textColor
-            )}
+            className="widgets-header-close"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Widgets Content */}
-        <div className="flex-1 overflow-y-auto win11-scrollbar p-4 space-y-4">
+        <div className="widgets-content win11-scrollbar">
           {/* Weather Widget */}
-          <div className={cn(
-            'p-4 rounded-lg border',
-            borderColor,
-            isDarkMode ? 'bg-black/20' : 'bg-white/50'
-          )}>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className={cn('text-sm font-semibold', textColor)}>Weather</h3>
-              <Cloud size={20} className={mutedText} />
+          <div className="widget-card" data-theme={isDarkMode ? 'dark' : 'light'}>
+            <div className="widget-card-header">
+              <h3 className="widget-card-title">Weather</h3>
+              <Cloud size={20} />
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-4xl font-bold" style={{ color: accentColor.hex }}>
+              <div className="widget-weather-temp" style={{ color: accentColor.hex }}>
                 {weather.temp}°
               </div>
-              <div className="flex-1">
-                <div className={cn('text-sm font-medium', textColor)}>{weather.condition}</div>
-                <div className={cn('text-xs', mutedText)}>{weather.location}</div>
-                <div className={cn('text-xs mt-1', mutedText)}>
+              <div className="widget-weather-info">
+                <div className="widget-weather-condition">{weather.condition}</div>
+                <div className="widget-weather-location">{weather.location}</div>
+                <div className="widget-weather-range">
                   H: {weather.high}° L: {weather.low}°
                 </div>
               </div>
@@ -112,45 +87,35 @@ export const Widgets: React.FC<WidgetsProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* Calendar Widget */}
-          <div className={cn(
-            'p-4 rounded-lg border',
-            borderColor,
-            isDarkMode ? 'bg-black/20' : 'bg-white/50'
-          )}>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className={cn('text-sm font-semibold', textColor)}>Calendar</h3>
-              <Calendar size={20} className={mutedText} />
+          <div className="widget-card" data-theme={isDarkMode ? 'dark' : 'light'}>
+            <div className="widget-card-header">
+              <h3 className="widget-card-title">Calendar</h3>
+              <Calendar size={20} />
             </div>
-            <div className={cn('text-2xl font-bold mb-1', textColor)}>
+            <div className="widget-calendar-date">
               {new Date().getDate()}
             </div>
-            <div className={cn('text-xs', mutedText)}>
+            <div className="widget-calendar-day">
               {new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long' })}
             </div>
           </div>
 
           {/* Stocks Widget */}
-          <div className={cn(
-            'p-4 rounded-lg border',
-            borderColor,
-            isDarkMode ? 'bg-black/20' : 'bg-white/50'
-          )}>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className={cn('text-sm font-semibold', textColor)}>Stocks</h3>
-              <TrendingUp size={20} className={mutedText} />
+          <div className="widget-card" data-theme={isDarkMode ? 'dark' : 'light'}>
+            <div className="widget-card-header">
+              <h3 className="widget-card-title">Stocks</h3>
+              <TrendingUp size={20} />
             </div>
             <div className="space-y-2">
               {stocks.map((stock) => (
-                <div key={stock.symbol} className="flex items-center justify-between">
+                <div key={stock.symbol} className="widget-stock-item">
                   <div>
-                    <div className={cn('text-sm font-medium', textColor)}>{stock.symbol}</div>
-                    <div className={cn('text-xs', mutedText)}>{stock.name}</div>
+                    <div className="widget-stock-symbol">{stock.symbol}</div>
+                    <div className="widget-stock-name">{stock.name}</div>
                   </div>
                   <div className="text-right">
-                    <div className={cn('text-sm font-medium', textColor)}>${stock.price}</div>
-                    <div
-                      className={cn('text-xs', stock.change >= 0 ? 'text-green-500' : 'text-red-500')}
-                    >
+                    <div className="widget-stock-price">${stock.price}</div>
+                    <div className={cn('widget-stock-change', stock.change >= 0 ? 'widget-stock-change-positive' : 'widget-stock-change-negative')}>
                       {stock.change >= 0 ? '+' : ''}{stock.change} ({stock.changePercent >= 0 ? '+' : ''}{stock.changePercent}%)
                     </div>
                   </div>
@@ -160,20 +125,16 @@ export const Widgets: React.FC<WidgetsProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* News Widget */}
-          <div className={cn(
-            'p-4 rounded-lg border',
-            borderColor,
-            isDarkMode ? 'bg-black/20' : 'bg-white/50'
-          )}>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className={cn('text-sm font-semibold', textColor)}>News</h3>
-              <Newspaper size={20} className={mutedText} />
+          <div className="widget-card" data-theme={isDarkMode ? 'dark' : 'light'}>
+            <div className="widget-card-header">
+              <h3 className="widget-card-title">News</h3>
+              <Newspaper size={20} />
             </div>
             <div className="space-y-3">
               {news.map((item, index) => (
-                <div key={index} className={cn('pb-3', index < news.length - 1 && 'border-b', borderColor)}>
-                  <div className={cn('text-sm font-medium mb-1', textColor)}>{item.title}</div>
-                  <div className={cn('text-xs flex items-center gap-2', mutedText)}>
+                <div key={index} className="widget-news-item">
+                  <div className="widget-news-title">{item.title}</div>
+                  <div className="widget-news-meta">
                     <span>{item.source}</span>
                     <span>•</span>
                     <span>{item.time}</span>

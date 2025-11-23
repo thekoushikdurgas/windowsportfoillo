@@ -1,76 +1,548 @@
 /**
  * Windows 11 Styles
- * CSS variables, animations, and utilities for Windows 11 UI
+ * Enhanced CSS variables, animations, and utilities for Windows 11 UI
+ * Modern design system with comprehensive tokens
  */
 
 :root {
-  /* Windows 11 Color Variables - Light Theme */
-  --win11-bg: #f3f3f3;
-  --win11-surface: #ffffff;
-  --win11-surface-elevated: #ffffff;
-  --win11-text: #000000;
-  --win11-text-secondary: #6b6b6b;
-  --win11-border: rgba(0, 0, 0, 0.1);
-  --win11-accent: #0078d4;
-  --win11-accent-hover: #106ebe;
-  --win11-error: #d13438;
-  --win11-success: #107c10;
-  --win11-warning: #ffaa44;
+  /* ============================================
+     RESPONSIVE BREAKPOINTS
+     ============================================ */
+  --win11-breakpoint-mobile: 320px;
+  --win11-breakpoint-tablet: 768px;
+  --win11-breakpoint-desktop: 1024px;
+  --win11-breakpoint-large: 1440px;
+  --win11-breakpoint-xlarge: 1920px;
 
-  /* Spacing */
-  --win11-spacing-xs: 4px;
-  --win11-spacing-sm: 8px;
-  --win11-spacing-md: 12px;
-  --win11-spacing-lg: 16px;
-  --win11-spacing-xl: 20px;
-  --win11-spacing-2xl: 24px;
-  --win11-spacing-3xl: 32px;
-  --win11-spacing-4xl: 40px;
-  --win11-spacing-5xl: 48px;
+  /* ============================================
+     SPACING SCALE (4px base unit)
+     ============================================ */
+  --win11-spacing-0: 0px;
+  --win11-spacing-1: 4px;
+  --win11-spacing-2: 8px;
+  --win11-spacing-3: 12px;
+  --win11-spacing-4: 16px;
+  --win11-spacing-5: 20px;
+  --win11-spacing-6: 24px;
+  --win11-spacing-8: 32px;
+  --win11-spacing-10: 40px;
+  --win11-spacing-12: 48px;
+  --win11-spacing-16: 64px;
+  --win11-spacing-20: 80px;
+  --win11-spacing-24: 96px;
+  --win11-spacing-32: 128px;
+  
+  /* Legacy spacing (for backward compatibility) */
+  --win11-spacing-xs: var(--win11-spacing-1);
+  --win11-spacing-sm: var(--win11-spacing-2);
+  --win11-spacing-md: var(--win11-spacing-3);
+  --win11-spacing-lg: var(--win11-spacing-4);
+  --win11-spacing-xl: var(--win11-spacing-5);
+  --win11-spacing-2xl: var(--win11-spacing-6);
+  --win11-spacing-3xl: var(--win11-spacing-8);
+  --win11-spacing-4xl: var(--win11-spacing-10);
+  --win11-spacing-5xl: var(--win11-spacing-12);
 
-  /* Border Radius */
+  /* ============================================
+     BORDER RADIUS SCALE
+     ============================================ */
   --win11-radius-none: 0px;
+  --win11-radius-xs: 2px;
   --win11-radius-sm: 4px;
-  --win11-radius-md: 8px;
-  --win11-radius-lg: 12px;
-  --win11-radius-xl: 16px;
-  --win11-radius-window: 8px;
-  --win11-radius-button: 4px;
-  --win11-radius-input: 4px;
-  --win11-radius-card: 8px;
-  --win11-radius-panel: 12px;
+  --win11-radius-md: 6px;
+  --win11-radius-lg: 8px;
+  --win11-radius-xl: 12px;
+  --win11-radius-2xl: 16px;
+  --win11-radius-3xl: 20px;
+  --win11-radius-full: 9999px;
+  
+  /* Component-specific radius */
+  --win11-radius-window: var(--win11-radius-lg);
+  --win11-radius-button: var(--win11-radius-sm);
+  --win11-radius-input: var(--win11-radius-sm);
+  --win11-radius-card: var(--win11-radius-lg);
+  --win11-radius-panel: var(--win11-radius-xl);
+  --win11-radius-badge: var(--win11-radius-full);
 
-  /* Shadows */
-  --win11-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --win11-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --win11-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --win11-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
-  --win11-shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
-  --win11-shadow-window: 0 8px 32px rgba(0, 0, 0, 0.2);
-  --win11-shadow-window-active: 0 12px 48px rgba(0, 0, 0, 0.3);
+  /* ============================================
+     OPACITY SCALE
+     ============================================ */
+  --win11-opacity-0: 0;
+  --win11-opacity-5: 0.05;
+  --win11-opacity-10: 0.1;
+  --win11-opacity-20: 0.2;
+  --win11-opacity-30: 0.3;
+  --win11-opacity-40: 0.4;
+  --win11-opacity-50: 0.5;
+  --win11-opacity-60: 0.6;
+  --win11-opacity-70: 0.7;
+  --win11-opacity-80: 0.8;
+  --win11-opacity-90: 0.9;
+  --win11-opacity-95: 0.95;
+  --win11-opacity-100: 1;
 
-  /* Animation */
+  /* ============================================
+     ELEVATION/SHADOW SYSTEM (0-24 levels)
+     ============================================ */
+  --win11-elevation-0: none;
+  --win11-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --win11-elevation-2: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --win11-elevation-3: 0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --win11-elevation-4: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --win11-elevation-6: 0 6px 10px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --win11-elevation-8: 0 8px 12px rgba(0, 0, 0, 0.12), 0 4px 6px rgba(0, 0, 0, 0.08);
+  --win11-elevation-12: 0 12px 16px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+  --win11-elevation-16: 0 16px 24px rgba(0, 0, 0, 0.14), 0 6px 12px rgba(0, 0, 0, 0.1);
+  --win11-elevation-24: 0 24px 32px rgba(0, 0, 0, 0.16), 0 8px 16px rgba(0, 0, 0, 0.12);
+  
+  /* Legacy shadows (for backward compatibility) */
+  --win11-shadow-sm: var(--win11-elevation-2);
+  --win11-shadow-md: var(--win11-elevation-4);
+  --win11-shadow-lg: var(--win11-elevation-8);
+  --win11-shadow-xl: var(--win11-elevation-12);
+  --win11-shadow-2xl: var(--win11-elevation-24);
+  --win11-shadow-window: var(--win11-elevation-16);
+  --win11-shadow-window-active: var(--win11-elevation-24);
+
+  /* ============================================
+     ANIMATION TIMING & EASING
+     ============================================ */
+  --win11-animation-instant: 0ms;
   --win11-animation-fast: 150ms;
   --win11-animation-normal: 200ms;
   --win11-animation-slow: 300ms;
   --win11-animation-slower: 500ms;
+  --win11-animation-slowest: 700ms;
+  
+  /* Easing functions */
+  --win11-easing-linear: linear;
+  --win11-easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --win11-easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --win11-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --win11-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --win11-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Windows 11 specific easing */
   --win11-easing: cubic-bezier(0.1, 0.9, 0.2, 1);
   --win11-easing-default: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  /* ============================================
+     COLOR SYSTEM - LIGHT THEME
+     ============================================ */
+  
+  /* Base Colors */
+  --win11-bg: #f3f3f3;
+  --win11-surface: #ffffff;
+  --win11-surface-elevated: #ffffff;
+  --win11-surface-hover: #f5f5f5;
+  --win11-surface-active: #e8e8e8;
+  
+  /* Text Colors */
+  --win11-text: #000000;
+  --win11-text-primary: #000000;
+  --win11-text-secondary: #6b6b6b;
+  --win11-text-tertiary: #9e9e9e;
+  --win11-text-disabled: #c0c0c0;
+  --win11-text-inverse: #ffffff;
+  
+  /* Border Colors */
+  --win11-border: rgba(0, 0, 0, 0.1);
+  --win11-border-subtle: rgba(0, 0, 0, 0.05);
+  --win11-border-strong: rgba(0, 0, 0, 0.2);
+  --win11-border-focus: var(--win11-accent);
+  
+  /* Accent Colors - DurgasOS Brand Orange */
+  --win11-accent: #ea580c;
+  --win11-accent-hover: #f97316;
+  --win11-accent-active: #c2410c;
+  --win11-accent-light: rgba(234, 88, 12, 0.1);
+  --win11-accent-lighter: rgba(234, 88, 12, 0.05);
+  
+  /* Semantic Colors - Success */
+  --win11-success: #107c10;
+  --win11-success-hover: #0e6e0e;
+  --win11-success-active: #0c5f0c;
+  --win11-success-light: rgba(16, 124, 16, 0.1);
+  --win11-success-text: #0e6e0e;
+  
+  /* Semantic Colors - Warning */
+  --win11-warning: #ffaa44;
+  --win11-warning-hover: #ff9900;
+  --win11-warning-active: #e68900;
+  --win11-warning-light: rgba(255, 170, 68, 0.1);
+  --win11-warning-text: #cc8800;
+  
+  /* Semantic Colors - Error */
+  --win11-error: #d13438;
+  --win11-error-hover: #c02e32;
+  --win11-error-active: #a8282c;
+  --win11-error-light: rgba(209, 52, 56, 0.1);
+  --win11-error-text: #c02e32;
+  
+  /* Semantic Colors - Info */
+  --win11-info: #ea580c;
+  --win11-info-hover: #f97316;
+  --win11-info-active: #c2410c;
+  --win11-info-light: rgba(234, 88, 12, 0.1);
+  --win11-info-text: #c2410c;
+  
+  /* Overlay Colors */
+  --win11-overlay: rgba(0, 0, 0, 0.4);
+  --win11-overlay-light: rgba(0, 0, 0, 0.2);
+  --win11-overlay-dark: rgba(0, 0, 0, 0.6);
+}
+
+/* Theme Transition */
+*,
+*::before,
+*::after {
+  transition: background-color var(--win11-animation-slower) var(--win11-easing-ease-in-out),
+              color var(--win11-animation-slower) var(--win11-easing-ease-in-out),
+              border-color var(--win11-animation-slower) var(--win11-easing-ease-in-out);
+}
+
+/* Disable transitions for performance-critical elements */
+.win11-no-transition,
+.win11-no-transition *,
+.win11-no-transition *::before,
+.win11-no-transition *::after {
+  transition: none !important;
 }
 
 [data-theme='dark'] {
-  /* Windows 11 Color Variables - Dark Theme */
+  /* ============================================
+     COLOR SYSTEM - DARK THEME
+     ============================================ */
+  
+  /* Base Colors */
   --win11-bg: #202020;
   --win11-surface: #2d2d2d;
   --win11-surface-elevated: #383838;
+  --win11-surface-hover: #3535f5f5;
+  --win11-surface-active: #e8e8e8;
+  
+  /* Text Colors */
   --win11-text: #ffffff;
+  --win11-text-primary: #ffffff;
   --win11-text-secondary: #b3b3b3;
+  --win11-text-tertiary: #808080;
+  --win11-text-disabled: #4d4d4d;
+  --win11-text-inverse: #000000;
+  
+  /* Border Colors */
   --win11-border: rgba(255, 255, 255, 0.1);
-  --win11-accent: #0078d4;
-  --win11-accent-hover: #1a86e0;
+  --win11-border-subtle: rgba(255, 255, 255, 0.05);
+  --win11-border-strong: rgba(255, 255, 255, 0.2);
+  --win11-border-focus: var(--win11-accent);
+  
+  /* Accent Colors - DurgasOS Brand Orange */
+  --win11-accent: #ea580c;
+  --win11-accent-hover: #f97316;
+  --win11-accent-active: #c2410c;
+  --win11-accent-light: rgba(234, 88, 12, 0.2);
+  --win11-accent-lighter: rgba(234, 88, 12, 0.1);
+  
+  /* Semantic Colors - Success */
+  --win11-success: #6fcf97;
+  --win11-success-hover: #5fb885;
+  --win11-success-active: #4fa173;
+  --win11-success-light: rgba(111, 207, 151, 0.2);
+  --win11-success-text: #6fcf97;
+  
+  /* Semantic Colors - Warning */
+  --win11-warning: #ffb84d;
+  --win11-warning-hover: #ffaa33;
+  --win11-warning-active: #ff9900;
+  --win11-warning-light: rgba(255, 184, 77, 0.2);
+  --win11-warning-text: #ffb84d;
+  
+  /* Semantic Colors - Error */
+  --win11-error: #f56565;
+  --win11-error-hover: #f44336;
+  --win11-error-active: #e53e3e;
+  --win11-error-light: rgba(245, 101, 101, 0.2);
+  --win11-error-text: #f56565;
+  
+  /* Semantic Colors - Info */
+  --win11-info: #4299e1;
+  --win11-info-hover: #3182ce;
+  --win11-info-active: #2c5282;
+  --win11-info-light: rgba(66, 153, 225, 0.2);
+  --win11-info-text: #4299e1;
+  
+  /* Overlay Colors */
+  --win11-overlay: rgba(0, 0, 0, 0.6);
+  --win11-overlay-light: rgba(0, 0, 0, 0.4);
+  --win11-overlay-dark: rgba(0, 0, 0, 0.8);
+  
+  /* Surface adjustments for dark theme */
+  --win11-surface-hover: rgba(255, 255, 255, 0.05);
+  --win11-surface-active: rgba(255, 255, 255, 0.1);
+  
+  /* Theme-specific animations */
+  --win11-theme-transition-duration: var(--win11-animation-slower);
+  --win11-theme-easing: var(--win11-easing-ease-in-out);
 }
 
-/* Acrylic/Glassmorphism Utilities */
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --win11-border: rgba(0, 0, 0, 0.3);
+    --win11-border-strong: rgba(0, 0, 0, 0.5);
+    --win11-text-secondary: #000000;
+  }
+  
+  [data-theme='dark'] {
+    --win11-border: rgba(255, 255, 255, 0.3);
+    --win11-border-strong: rgba(255, 255, 255, 0.5);
+    --win11-text-secondary: #ffffff;
+  }
+  
+  .win11-acrylic,
+  .win11-acrylic-light,
+  .win11-acrylic-dark,
+  .win11-acrylic-ultra {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--win11-surface);
+  }
+}
+
+/* ============================================
+   TYPOGRAPHY SYSTEM
+   ============================================ */
+
+:root {
+  /* Font Families */
+  --win11-font-family-base: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --win11-font-family-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
+  --win11-font-family-display: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  
+  /* Font Sizes - Display */
+  --win11-font-size-display-2xl: 72px;
+  --win11-font-size-display-xl: 60px;
+  --win11-font-size-display-lg: 48px;
+  --win11-font-size-display-md: 36px;
+  --win11-font-size-display-sm: 30px;
+  
+  /* Font Sizes - Heading */
+  --win11-font-size-h1: 32px;
+  --win11-font-size-h2: 28px;
+  --win11-font-size-h3: 24px;
+  --win11-font-size-h4: 20px;
+  --win11-font-size-h5: 18px;
+  --win11-font-size-h6: 16px;
+  
+  /* Font Sizes - Body */
+  --win11-font-size-xl: 20px;
+  --win11-font-size-lg: 18px;
+  --win11-font-size-base: 14px;
+  --win11-font-size-sm: 12px;
+  --win11-font-size-xs: 11px;
+  --win11-font-size-2xs: 10px;
+  
+  /* Font Sizes - Caption & Label */
+  --win11-font-size-caption: 12px;
+  --win11-font-size-label: 12px;
+  --win11-font-size-label-sm: 11px;
+  
+  /* Font Weights */
+  --win11-font-weight-light: 300;
+  --win11-font-weight-normal: 400;
+  --win11-font-weight-medium: 500;
+  --win11-font-weight-semibold: 600;
+  --win11-font-weight-bold: 700;
+  
+  /* Line Heights */
+  --win11-line-height-tight: 1.2;
+  --win11-line-height-snug: 1.375;
+  --win11-line-height-normal: 1.5;
+  --win11-line-height-relaxed: 1.625;
+  --win11-line-height-loose: 2;
+  
+  /* Letter Spacing */
+  --win11-letter-spacing-tighter: -0.05em;
+  --win11-letter-spacing-tight: -0.025em;
+  --win11-letter-spacing-normal: 0;
+  --win11-letter-spacing-wide: 0.025em;
+  --win11-letter-spacing-wider: 0.05em;
+  --win11-letter-spacing-widest: 0.1em;
+  
+  /* Typography Scale - Display */
+  --win11-text-display-2xl: var(--win11-font-size-display-2xl) / var(--win11-line-height-tight) var(--win11-font-family-display);
+  --win11-text-display-xl: var(--win11-font-size-display-xl) / var(--win11-line-height-tight) var(--win11-font-family-display);
+  --win11-text-display-lg: var(--win11-font-size-display-lg) / var(--win11-line-height-tight) var(--win11-font-family-display);
+  --win11-text-display-md: var(--win11-font-size-display-md) / var(--win11-line-height-tight) var(--win11-font-family-display);
+  --win11-text-display-sm: var(--win11-font-size-display-sm) / var(--win11-line-height-tight) var(--win11-font-family-display);
+  
+  /* Typography Scale - Heading */
+  --win11-text-h1: var(--win11-font-size-h1) / var(--win11-line-height-tight) var(--win11-font-family-base);
+  --win11-text-h2: var(--win11-font-size-h2) / var(--win11-line-height-tight) var(--win11-font-family-base);
+  --win11-text-h3: var(--win11-font-size-h3) / var(--win11-line-height-snug) var(--win11-font-family-base);
+  --win11-text-h4: var(--win11-font-size-h4) / var(--win11-line-height-snug) var(--win11-font-family-base);
+  --win11-text-h5: var(--win11-font-size-h5) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  --win11-text-h6: var(--win11-font-size-h6) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  
+  /* Typography Scale - Body */
+  --win11-text-xl: var(--win11-font-size-xl) / var(--win11-line-height-relaxed) var(--win11-font-family-base);
+  --win11-text-lg: var(--win11-font-size-lg) / var(--win11-line-height-relaxed) var(--win11-font-family-base);
+  --win11-text-base: var(--win11-font-size-base) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  --win11-text-sm: var(--win11-font-size-sm) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  --win11-text-xs: var(--win11-font-size-xs) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  --win11-text-2xs: var(--win11-font-size-2xs) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  
+  /* Typography Scale - Caption & Label */
+  --win11-text-caption: var(--win11-font-size-caption) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  --win11-text-label: var(--win11-font-size-label) / var(--win11-line-height-normal) var(--win11-font-family-base);
+  --win11-text-label-sm: var(--win11-font-size-label-sm) / var(--win11-line-height-normal) var(--win11-font-family-base);
+}
+
+/* Typography Utility Classes */
+.win11-text-display-2xl {
+  font: var(--win11-text-display-2xl);
+  font-weight: var(--win11-font-weight-bold);
+  letter-spacing: var(--win11-letter-spacing-tight);
+}
+
+.win11-text-display-xl {
+  font: var(--win11-text-display-xl);
+  font-weight: var(--win11-font-weight-bold);
+  letter-spacing: var(--win11-letter-spacing-tight);
+}
+
+.win11-text-display-lg {
+  font: var(--win11-text-display-lg);
+  font-weight: var(--win11-font-weight-bold);
+  letter-spacing: var(--win11-letter-spacing-tight);
+}
+
+.win11-text-h1 {
+  font: var(--win11-text-h1);
+  font-weight: var(--win11-font-weight-semibold);
+  letter-spacing: var(--win11-letter-spacing-tight);
+}
+
+.win11-text-h2 {
+  font: var(--win11-text-h2);
+  font-weight: var(--win11-font-weight-semibold);
+  letter-spacing: var(--win11-letter-spacing-tight);
+}
+
+.win11-text-h3 {
+  font: var(--win11-text-h3);
+  font-weight: var(--win11-font-weight-semibold);
+  letter-spacing: var(--win11-letter-spacing-normal);
+}
+
+.win11-text-h4 {
+  font: var(--win11-text-h4);
+  font-weight: var(--win11-font-weight-semibold);
+  letter-spacing: var(--win11-letter-spacing-normal);
+}
+
+.win11-text-h5 {
+  font: var(--win11-text-h5);
+  font-weight: var(--win11-font-weight-medium);
+  letter-spacing: var(--win11-letter-spacing-normal);
+}
+
+.win11-text-h6 {
+  font: var(--win11-text-h6);
+  font-weight: var(--win11-font-weight-medium);
+  letter-spacing: var(--win11-letter-spacing-normal);
+}
+
+.win11-text-body-xl {
+  font: var(--win11-text-xl);
+  font-weight: var(--win11-font-weight-normal);
+}
+
+.win11-text-body-lg {
+  font: var(--win11-text-lg);
+  font-weight: var(--win11-font-weight-normal);
+}
+
+.win11-text-body {
+  font: var(--win11-text-base);
+  font-weight: var(--win11-font-weight-normal);
+}
+
+.win11-text-body-sm {
+  font: var(--win11-text-sm);
+  font-weight: var(--win11-font-weight-normal);
+}
+
+.win11-text-caption {
+  font: var(--win11-text-caption);
+  font-weight: var(--win11-font-weight-normal);
+  color: var(--win11-text-secondary);
+}
+
+.win11-text-label {
+  font: var(--win11-text-label);
+  font-weight: var(--win11-font-weight-medium);
+  letter-spacing: var(--win11-letter-spacing-wide);
+}
+
+.win11-text-label-sm {
+  font: var(--win11-text-label-sm);
+  font-weight: var(--win11-font-weight-medium);
+  letter-spacing: var(--win11-letter-spacing-wide);
+}
+
+/* Font Rendering */
+.win11-text-antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.win11-text-subpixel {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* Text Color Utilities */
+.win11-text-primary {
+  color: var(--win11-text-primary);
+}
+
+.win11-text-secondary {
+  color: var(--win11-text-secondary);
+}
+
+.win11-text-tertiary {
+  color: var(--win11-text-tertiary);
+}
+
+.win11-text-disabled {
+  color: var(--win11-text-disabled);
+}
+
+.win11-text-accent {
+  color: var(--win11-accent);
+}
+
+.win11-text-success {
+  color: var(--win11-success-text);
+}
+
+.win11-text-warning {
+  color: var(--win11-warning-text);
+}
+
+.win11-text-error {
+  color: var(--win11-error-text);
+}
+
+.win11-text-info {
+  color: var(--win11-info-text);
+}
+
+/* ============================================
+   ACRYLIC/GLASSMORPHISM UTILITIES
+   ============================================ */
+
 .win11-acrylic {
   backdrop-filter: blur(30px) saturate(1.2) brightness(1.1);
   -webkit-backdrop-filter: blur(30px) saturate(1.2) brightness(1.1);
@@ -312,7 +784,8 @@
 
 .win11-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: var(--win11-radius-full);
+  transition: background-color var(--win11-animation-fast) var(--win11-easing);
 }
 
 .win11-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -329,5 +802,184 @@
 
 [data-theme='dark'] .win11-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   MICRO-INTERACTIONS & ANIMATIONS
+   ============================================ */
+
+/* Button Press Animation */
+@keyframes win11-button-press {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Focus Ring Animation */
+@keyframes win11-focus-ring {
+  0% {
+    outline-width: 2px;
+    outline-color: var(--win11-accent);
+  }
+  50% {
+    outline-width: 3px;
+    outline-color: var(--win11-accent-hover);
+  }
+  100% {
+    outline-width: 2px;
+    outline-color: var(--win11-accent);
+  }
+}
+
+/* Loading Spinner */
+@keyframes win11-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.win11-loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--win11-border);
+  border-top-color: var(--win11-accent);
+  border-radius: 50%;
+  animation: win11-spin var(--win11-animation-slow) linear infinite;
+}
+
+/* Pulse Animation */
+@keyframes win11-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.win11-pulse {
+  animation: win11-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade In Animation */
+@keyframes win11-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.win11-fade-in {
+  animation: win11-fade-in var(--win11-animation-normal) var(--win11-easing);
+}
+
+/* Slide In Animations */
+@keyframes win11-slide-in-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes win11-slide-in-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes win11-slide-in-left {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes win11-slide-in-right {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.win11-slide-in-up {
+  animation: win11-slide-in-up var(--win11-animation-normal) var(--win11-easing);
+}
+
+.win11-slide-in-down {
+  animation: win11-slide-in-down var(--win11-animation-normal) var(--win11-easing);
+}
+
+.win11-slide-in-left {
+  animation: win11-slide-in-left var(--win11-animation-normal) var(--win11-easing);
+}
+
+.win11-slide-in-right {
+  animation: win11-slide-in-right var(--win11-animation-normal) var(--win11-easing);
+}
+
+/* Spring Animation */
+@keyframes win11-spring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.win11-spring {
+  animation: win11-spring var(--win11-animation-slow) var(--win11-easing-spring);
 }
 

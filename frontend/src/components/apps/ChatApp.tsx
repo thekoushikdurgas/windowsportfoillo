@@ -6,6 +6,7 @@ import { generateChatResponse, transcribeAudio } from '@/services/geminiService'
 import { Send, Bot, User, Loader2, Search, Mic, Square } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { useNotification } from '@/context/NotificationContext';
+import { cn } from '@/lib/utils/cn';
 
 const ChatApp: React.FC<WindowProps> = ({ isActive }) => {
   const { isDarkMode, accentColor } = useTheme();
@@ -29,13 +30,6 @@ const ChatApp: React.FC<WindowProps> = ({ isActive }) => {
   const isActiveRef = useRef(isActive);
   useEffect(() => { isActiveRef.current = isActive; }, [isActive]);
 
-  const bg = isDarkMode ? 'bg-[#202020]' : 'bg-white';
-  const text = isDarkMode ? 'text-white' : 'text-gray-900';
-  const inputBg = isDarkMode ? 'bg-[#2b2b2b] border-[#444]' : 'bg-gray-100 border-gray-300';
-  const footerBg = isDarkMode ? 'bg-[#1a1a1a] border-[#333]' : 'bg-gray-50 border-gray-200';
-  const messageUserBg = `bg-${accentColor.tailwind}`;
-  const messageModelBg = isDarkMode ? 'bg-[#333]' : 'bg-gray-200';
-  const messageModelText = isDarkMode ? 'text-white' : 'text-gray-900';
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -158,24 +152,24 @@ const ChatApp: React.FC<WindowProps> = ({ isActive }) => {
   };
 
   return (
-    <div className={`flex flex-col h-full ${bg} ${text} font-sans`}>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4" ref={scrollRef}>
+    <div className="chat-container" data-theme={isDarkMode ? 'dark' : 'light'}>
+      <div className="chat-messages" ref={scrollRef}>
         {messages.map((msg, idx) => (
-          <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] rounded-2xl p-3 ${msg.role === 'user' ? `${messageUserBg} text-white` : `${messageModelBg} ${messageModelText}`}`}>
-              <div className="flex items-center gap-2 mb-1 opacity-70 text-xs">
+          <div key={idx} className={cn('chat-message-wrapper', msg.role === 'user' ? 'chat-message-wrapper-user' : 'chat-message-wrapper-model')}>
+            <div className={cn('chat-message', msg.role === 'user' ? 'chat-message-user' : 'chat-message-model')}>
+              <div className="chat-message-header">
                 {msg.role === 'user' ? <User size={12} /> : <Bot size={12} />}
                 <span>{msg.role === 'user' ? 'You' : 'Gemini'}</span>
               </div>
-              <div className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</div>
+              <div className="chat-message-text">{msg.text}</div>
               
               {msg.groundingMetadata?.groundingChunks && (
-                <div className={`mt-2 pt-2 border-t ${isDarkMode ? 'border-white/10' : 'border-black/10'} text-xs`}>
-                  <p className="font-semibold mb-1 flex items-center gap-1"><Search size={10}/> Sources:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {msg.groundingMetadata.groundingChunks.map((chunk: any, i: number) => {
+                <div className="chat-message-sources" data-theme={isDarkMode ? 'dark' : 'light'}>
+                  <p className="chat-message-sources-title"><Search size={10}/> Sources:</p>
+                  <div className="chat-message-sources-list">
+                    {msg.groundingMetadata.groundingChunks.map((chunk, i: number) => {
                       if (chunk.web?.uri) {
-                        return <a key={i} href={chunk.web.uri} target="_blank" rel="noreferrer" className={`hover:underline truncate max-w-[150px] block px-2 py-1 rounded ${isDarkMode ? 'bg-black/20 text-blue-400' : 'bg-white/50 text-blue-600'}`}>{chunk.web.title || chunk.web.uri}</a>;
+                        return <a key={i} href={chunk.web.uri} target="_blank" rel="noreferrer" className="chat-message-source-link">{chunk.web.title || chunk.web.uri}</a>;
                       }
                       return null;
                     })}
@@ -186,41 +180,39 @@ const ChatApp: React.FC<WindowProps> = ({ isActive }) => {
           </div>
         ))}
         {isLoading && (
-           <div className="flex justify-start">
-             <div className={`${messageModelBg} rounded-2xl p-3 flex items-center gap-2`}>
-               <Loader2 className={`animate-spin ${messageModelText}`} size={16} />
-               <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{useThinking ? "Thinking deeply..." : "Generating..."}</span>
+           <div className="chat-loading">
+             <div className="chat-loading-message">
+               <Loader2 className="animate-spin" size={16} />
+               <span>{useThinking ? "Thinking deeply..." : "Generating..."}</span>
              </div>
            </div>
         )}
       </div>
 
-      <div className={`p-3 border-t ${footerBg}`}>
-        <div className="flex gap-2 mb-2 text-xs">
+      <div className="chat-footer" data-theme={isDarkMode ? 'dark' : 'light'}>
+        <div className="chat-footer-controls">
           <button 
             onClick={() => setUseThinking(!useThinking)}
-            className={`px-2 py-1 rounded border ${useThinking ? 'bg-purple-600 border-purple-500 text-white' : `${isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-300 hover:bg-gray-200'}`}`}
+            className={cn('chat-footer-button', useThinking && 'chat-footer-button-active')}
           >
             Thinking Mode {useThinking ? 'ON' : 'OFF'}
           </button>
           <button 
             onClick={() => setUseGrounding(!useGrounding)}
-            className={`px-2 py-1 rounded border ${useGrounding ? 'bg-green-600 border-green-500 text-white' : `${isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-300 hover:bg-gray-200'}`}`}
+            className={cn('chat-footer-button', useGrounding && 'chat-footer-button-green-active')}
           >
             Google Grounding {useGrounding ? 'ON' : 'OFF'}
           </button>
         </div>
-        <div className="flex gap-2 items-end">
+        <div className="chat-footer-input-area">
            <button
              onClick={handleMicClick}
              disabled={isTranscribing}
-             className={`p-2 h-10 w-10 flex items-center justify-center rounded-lg border transition-all shrink-0 ${
-               isRecording 
-                 ? 'bg-red-500 border-red-500 text-white animate-pulse' 
-                 : isTranscribing
-                   ? 'bg-transparent border-transparent text-gray-400 cursor-wait'
-                   : `${isDarkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-gray-200 text-gray-600'} border-transparent`
-             }`}
+             className={cn(
+               'chat-footer-mic-button',
+               isRecording && 'chat-footer-mic-button-recording',
+               isTranscribing && 'chat-footer-mic-button-transcribing'
+             )}
              title={isRecording ? "Stop Recording" : "Voice Input"}
            >
              {isTranscribing ? <Loader2 size={18} className="animate-spin" /> : isRecording ? <Square size={18} fill="currentColor" /> : <Mic size={18} />}
@@ -229,7 +221,7 @@ const ChatApp: React.FC<WindowProps> = ({ isActive }) => {
           <textarea
             ref={textareaRef}
             rows={1}
-            className={`flex-1 border rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500 ${inputBg} resize-none overflow-hidden min-h-[40px] max-h-[150px]`}
+            className="chat-footer-textarea"
             placeholder={isRecording ? "Listening... (Speak now)" : isTranscribing ? "Transcribing audio..." : "Ask anything... (Shift+Enter for new line)"}
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -244,7 +236,8 @@ const ChatApp: React.FC<WindowProps> = ({ isActive }) => {
           
           <button 
             onClick={handleSend} 
-            className={`bg-${accentColor.tailwind} h-10 w-10 flex items-center justify-center hover:opacity-90 rounded-lg transition-colors text-white disabled:opacity-50 shrink-0`} 
+            className="chat-footer-send-button"
+            style={{ backgroundColor: accentColor.hex }}
             disabled={isLoading || isRecording || isTranscribing}
           >
             <Send size={18} />

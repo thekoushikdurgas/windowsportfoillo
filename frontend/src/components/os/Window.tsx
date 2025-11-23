@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { WindowState } from '@/types';
 import { useTheme } from '@/context/ThemeContext';
 import { X, Minus, Square, Copy } from 'lucide-react';
-import { Acrylic } from '@/components/ui/Acrylic';
 import SnapLayouts, { SnapZone } from './SnapLayouts';
 import { BORDER_RADIUS, SHADOWS, WINDOW_CONFIG } from '@/lib/windows11';
 import { cn } from '@/lib/utils/cn';
@@ -30,7 +29,7 @@ const Window: React.FC<WindowComponentProps> = ({
   onSnap, onUnsnap,
   children 
 }) => {
-  const { isDarkMode, accentColor, transparencyEffect } = useTheme();
+  const { isDarkMode, transparencyEffect } = useTheme();
   
   const [position, setPosition] = useState(state.position);
   const [size, setSize] = useState(state.size);
@@ -60,13 +59,6 @@ const Window: React.FC<WindowComponentProps> = ({
   useEffect(() => { positionRef.current = position; }, [position]);
   useEffect(() => { sizeRef.current = size; }, [size]);
 
-  const bg = isDarkMode ? 'bg-[#202020]' : 'bg-[#f3f3f3]';
-  const titleBarBg = transparencyEffect 
-    ? (isDarkMode ? 'bg-[#2d2d2d]/85 backdrop-blur-xl' : 'bg-[#e5e5e5]/85 backdrop-blur-xl')
-    : (isDarkMode ? 'bg-[#2d2d2d]' : 'bg-[#e5e5e5]');
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  
   // Windows 11 rounded corners
   const borderRadius = state.isMaximized ? BORDER_RADIUS.windowMaximized : BORDER_RADIUS.window;
   
@@ -108,9 +100,16 @@ const Window: React.FC<WindowComponentProps> = ({
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
+      const newX = e.clientX - dragOffset.x;
+      const newY = e.clientY - dragOffset.y;
+      
+      // Constrain to viewport boundaries
+      const constrainedX = Math.max(0, Math.min(newX, viewportSize.width - sizeRef.current.width));
+      const constrainedY = Math.max(0, Math.min(newY, viewportSize.height - sizeRef.current.height - 48)); // Account for taskbar
+      
       const newPos = {
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y
+        x: constrainedX,
+        y: constrainedY
       };
       setPosition(newPos);
     };
@@ -126,7 +125,7 @@ const Window: React.FC<WindowComponentProps> = ({
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, dragOffset, onMove]);
+  }, [isDragging, dragOffset, onMove, viewportSize]);
 
   if (state.isMinimized || !state.isOpen) return null;
 
@@ -141,25 +140,45 @@ const Window: React.FC<WindowComponentProps> = ({
        0,
   } : null;
 
+  // Constrain position to viewport
+  const constrainedPosition = {
+    x: Math.max(0, Math.min(position.x, viewportSize.width - size.width)),
+    y: Math.max(0, Math.min(position.y, viewportSize.height - size.height - 48)) // Account for taskbar
+  };
+  
+  // Constrain size to viewport
+  const constrainedSize = {
+    width: Math.min(size.width, viewportSize.width - constrainedPosition.x),
+    height: Math.min(size.height, viewportSize.height - constrainedPosition.y - 48) // Account for taskbar
+  };
+
   const layoutStyle: React.CSSProperties = state.isMaximized ? {
     left: 0,
     top: 0,
     width: '100%',
-    height: 'calc(100% - 48px)',
+    height: 'calc(100% - var(--taskbar-height, 48px))',
+    maxWidth: '100%',
+    maxHeight: 'calc(100% - var(--taskbar-height, 48px))',
     borderRadius: BORDER_RADIUS.windowMaximized,
   } : isSnapped && snappedPosition ? {
     left: snappedPosition.x,
     top: snappedPosition.y,
     width: viewportSize.width / 2,
+    maxWidth: viewportSize.width / 2,
     height: state.snapState?.layout === 'top' || state.snapState?.layout === 'bottom' 
+      ? viewportSize.height / 2 
+      : viewportSize.height - 48,
+    maxHeight: state.snapState?.layout === 'top' || state.snapState?.layout === 'bottom' 
       ? viewportSize.height / 2 
       : viewportSize.height - 48,
     borderRadius: borderRadius,
   } : {
-    left: position.x,
-    top: position.y,
-    width: size.width,
-    height: size.height,
+    left: constrainedPosition.x,
+    top: constrainedPosition.y,
+    width: constrainedSize.width,
+    height: constrainedSize.height,
+    maxWidth: viewportSize.width - constrainedPosition.x,
+    maxHeight: viewportSize.height - constrainedPosition.y - 48,
     borderRadius: borderRadius,
   };
 
@@ -182,13 +201,14 @@ const Window: React.FC<WindowComponentProps> = ({
       <div
         ref={windowRef}
         className={cn(
-          'absolute flex flex-col overflow-hidden border',
+          'window-container',
           'win11-window win11-transition',
-          borderColor,
-          bg,
-          isActive ? 'win11-window-active' : 'opacity-95',
+          isActive ? 'win11-window-active' : 'win11-window-inactive',
           state.isMaximized && 'win11-window-maximized'
         )}
+        data-active={isActive}
+        data-maximized={state.isMaximized}
+        data-theme={isDarkMode ? 'dark' : 'light'}
         style={{
           ...layoutStyle,
           zIndex: state.zIndex,
@@ -204,33 +224,34 @@ const Window: React.FC<WindowComponentProps> = ({
         {/* Acrylic Title Bar */}
         <div 
           className={cn(
-            'h-10 flex items-center justify-between select-none shrink-0',
-            titleBarBg,
+            'window-titlebar',
             state.isMaximized ? '' : 'cursor-default'
           )}
+          data-transparency={transparencyEffect}
+          data-theme={isDarkMode ? 'dark' : 'light'}
           onMouseDown={handleMouseDown}
           onDoubleClick={onMaximize}
         >
-        <div className="flex items-center gap-3 px-4 pointer-events-none">
-          {React.cloneElement(icon as React.ReactElement<any>, { size: 16 })}
-          <span className={`text-xs font-medium ${textColor}`}>{state.title}</span>
+        <div className="window-titlebar-content">
+          {React.cloneElement(icon as React.ReactElement<{ size?: number }>, { size: 16 })}
+          <span className="window-titlebar-title">{state.title}</span>
         </div>
-        <div className="flex h-full">
-          <button onClick={(e) => { e.stopPropagation(); onMinimize(); }} className={`px-4 ${isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/10'} ${textColor} flex items-center justify-center`}><Minus size={14} /></button>
-          <button onClick={(e) => { e.stopPropagation(); onMaximize(); }} className={`px-4 ${isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/10'} ${textColor} flex items-center justify-center`}>
+        <div className="window-titlebar-controls">
+          <button onClick={(e) => { e.stopPropagation(); onMinimize(); }} className="window-titlebar-button"><Minus size={14} /></button>
+          <button onClick={(e) => { e.stopPropagation(); onMaximize(); }} className="window-titlebar-button">
             {state.isMaximized ? <Copy size={12} className="rotate-180" /> : <Square size={12} />}
           </button>
-          <button onClick={(e) => { e.stopPropagation(); onClose(); }} className={`px-4 hover:bg-red-500 hover:text-white ${textColor} flex items-center justify-center`}><X size={14} /></button>
+          <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="window-titlebar-button window-titlebar-button-close"><X size={14} /></button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden relative">
+      <div className="window-content">
         {children}
       </div>
       
       {!state.isMaximized && !isSnapped && (
         <div 
-            className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize z-50"
+            className="window-resize-handle"
             onMouseDown={(e) => {
                 e.stopPropagation();
                 const startX = e.clientX;
@@ -239,9 +260,16 @@ const Window: React.FC<WindowComponentProps> = ({
                 const startH = size.height;
                 
                 const handleResize = (ev: MouseEvent) => {
+                    const newWidth = startW + (ev.clientX - startX);
+                    const newHeight = startH + (ev.clientY - startY);
+                    
+                    // Constrain to viewport boundaries
+                    const maxWidth = viewportSize.width - positionRef.current.x;
+                    const maxHeight = viewportSize.height - positionRef.current.y - 48; // Account for taskbar
+                    
                     setSize({
-                        width: Math.max(WINDOW_CONFIG.minWidth, startW + (ev.clientX - startX)),
-                        height: Math.max(WINDOW_CONFIG.minHeight, startH + (ev.clientY - startY))
+                        width: Math.max(WINDOW_CONFIG.minWidth, Math.min(newWidth, maxWidth)),
+                        height: Math.max(WINDOW_CONFIG.minHeight, Math.min(newHeight, maxHeight))
                     });
                 };
                 const stopResize = () => {

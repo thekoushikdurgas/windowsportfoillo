@@ -13,8 +13,8 @@ export const WINDOWS11_COLORS = {
     text: '#000000',
     textSecondary: '#6b6b6b',
     border: 'rgba(0, 0, 0, 0.1)',
-    accent: '#0078d4',
-    accentHover: '#106ebe',
+    accent: '#ea580c', // DurgasOS brand orange
+    accentHover: '#f97316',
     error: '#d13438',
     success: '#107c10',
     warning: '#ffaa44',
@@ -27,8 +27,8 @@ export const WINDOWS11_COLORS = {
     text: '#ffffff',
     textSecondary: '#b3b3b3',
     border: 'rgba(255, 255, 255, 0.1)',
-    accent: '#0078d4',
-    accentHover: '#1a86e0',
+    accent: '#ea580c', // DurgasOS brand orange
+    accentHover: '#f97316',
     error: '#d13438',
     success: '#107c10',
     warning: '#ffaa44',
@@ -160,19 +160,6 @@ export function getAcrylicStyles(
   };
 }
 
-/**
- * Get acrylic Tailwind classes
- */
-export function getAcrylicClasses(isDark: boolean, preset: keyof typeof ACRYLIC_PRESETS = isDark ? 'dark' : 'light'): string {
-  const opacity = ACRYLIC_PRESETS[preset].opacity;
-  const blur = ACRYLIC_PRESETS[preset].blur;
-  
-  if (isDark) {
-    return `bg-[#202020]/[${Math.round(opacity * 100)}%] backdrop-blur-[${blur}px]`;
-  } else {
-    return `bg-[#f3f3f3]/[${Math.round(opacity * 100)}%] backdrop-blur-[${blur}px]`;
-  }
-}
 
 // Snap Layout Configurations
 export interface SnapZone {

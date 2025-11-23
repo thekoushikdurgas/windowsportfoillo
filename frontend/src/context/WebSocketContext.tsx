@@ -4,15 +4,15 @@ import React, { createContext, useContext, useEffect, useState, useRef, useCallb
 
 interface WebSocketContextType {
   isConnected: boolean;
-  sendMessage: (message: any) => void;
-  lastMessage: any;
+  sendMessage: (message: string | object) => void;
+  lastMessage: string | object | null;
 }
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [lastMessage, setLastMessage] = useState<any>(null);
+  const [lastMessage, setLastMessage] = useState<string | object | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttempts = useRef(0);
@@ -77,7 +77,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
   }, [connect]);
 
-  const sendMessage = useCallback((message: any) => {
+  const sendMessage = useCallback((message: string | object) => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(message));
     } else {

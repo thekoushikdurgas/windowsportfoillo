@@ -1,0 +1,319 @@
+/**
+ * Desktop Component Styles
+ * Enhanced styles for the Desktop component with modern design
+ */
+
+/* ============================================
+   DESKTOP COMPONENT
+   ============================================ */
+
+.desktop-container {
+  height: var(--viewport-height, 100vh);
+  width: var(--viewport-width, 100vw);
+  max-height: var(--viewport-height, 100vh);
+  max-width: var(--viewport-width, 100vw);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image var(--win11-animation-slower) var(--win11-easing-ease-in-out);
+  animation: desktop-fade-in var(--win11-animation-normal) var(--win11-easing-ease-in-out);
+}
+
+/* Desktop fade-in animation after boot screen */
+@keyframes desktop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Desktop Icons Grid */
+.desktop-icons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: var(--win11-spacing-4);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-auto-rows: min-content;
+  gap: var(--win11-spacing-4);
+  align-content: start;
+  max-width: calc(var(--viewport-width, 100vw) - var(--win11-spacing-8));
+  max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height) - var(--win11-spacing-8));
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+/* Responsive Grid Adjustments */
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+  .desktop-icons {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: var(--win11-spacing-2);
+    padding: var(--win11-spacing-2);
+    max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height-mobile) - var(--win11-spacing-4));
+  }
+}
+
+/* Small Tablet: 480px - 768px */
+@media (min-width: 480px) and (max-width: 767px) {
+  .desktop-icons {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: var(--win11-spacing-3);
+    padding: var(--win11-spacing-3);
+    max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height-mobile) - var(--win11-spacing-6));
+  }
+}
+
+/* Tablet: 768px - 1024px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .desktop-icons {
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    gap: var(--win11-spacing-3);
+    padding: var(--win11-spacing-3);
+    max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height) - var(--win11-spacing-6));
+  }
+}
+
+/* Desktop: 1024px - 1440px */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .desktop-icons {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--win11-spacing-4);
+    padding: var(--win11-spacing-4);
+    max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height) - var(--win11-spacing-8));
+  }
+}
+
+/* Large Desktop: > 1440px */
+@media (min-width: 1440px) {
+  .desktop-icons {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: var(--win11-spacing-5);
+    padding: var(--win11-spacing-5);
+    max-height: calc(var(--viewport-height, 100vh) - var(--taskbar-height) - var(--win11-spacing-10));
+  }
+}
+
+/* Desktop Icon */
+.desktop-icon {
+  width: 80px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--win11-spacing-1);
+  padding: var(--win11-spacing-2);
+  background-color: transparent;
+  border-radius: var(--win11-radius-md);
+  border: 2px solid transparent;
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  outline: none;
+}
+
+.desktop-icon:focus-visible {
+  outline: 2px solid var(--win11-accent);
+  outline-offset: 2px;
+  border-color: var(--win11-accent-light);
+}
+
+.desktop-icon:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.desktop-icon:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: var(--win11-animation-fast);
+}
+
+/* Selected State */
+.desktop-icon[data-selected='true'] {
+  background-color: rgba(0, 120, 212, 0.2);
+  border-color: var(--win11-accent);
+  box-shadow: var(--win11-elevation-4);
+}
+
+.desktop-icon[data-selected='true']:hover {
+  background-color: rgba(0, 120, 212, 0.25);
+  border-color: var(--win11-accent-hover);
+}
+
+/* Desktop Icon Image Container */
+.desktop-icon-image {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--win11-spacing-2);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: var(--win11-radius-lg);
+  box-shadow: var(--win11-elevation-2);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.desktop-icon:hover .desktop-icon-image {
+  transform: scale(1.08);
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--win11-elevation-4);
+}
+
+.desktop-icon:active .desktop-icon-image {
+  transform: scale(1.02);
+  transition-duration: var(--win11-animation-fast);
+}
+
+.desktop-icon[data-selected='true'] .desktop-icon-image {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--win11-elevation-6);
+}
+
+/* Desktop Icon Title */
+.desktop-icon-title {
+  font: var(--win11-text-xs);
+  font-weight: var(--win11-font-weight-medium);
+  color: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  line-height: var(--win11-line-height-tight);
+  padding: var(--win11-spacing-1) var(--win11-spacing-2);
+  border-radius: var(--win11-radius-sm);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 8px rgba(0, 0, 0, 0.3);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+.desktop-icon:hover .desktop-icon-title {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 1);
+}
+
+.desktop-icon[data-selected='true'] .desktop-icon-title {
+  background-color: rgba(0, 120, 212, 0.3);
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Drag and Drop Visual Feedback */
+.desktop-icon[data-dragging='true'] {
+  opacity: var(--win11-opacity-70);
+  transform: scale(1.05);
+  z-index: 1000;
+  box-shadow: var(--win11-elevation-24);
+}
+
+.desktop-icon[data-drag-over='true'] {
+  border-color: var(--win11-accent);
+  background-color: rgba(0, 120, 212, 0.15);
+  transform: scale(1.02);
+}
+
+/* Context Menu Indicator */
+.desktop-icon[data-context-menu-open='true'] {
+  background-color: rgba(0, 120, 212, 0.2);
+  border-color: var(--win11-accent);
+}
+
+/* Responsive Icon Adjustments */
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+  .desktop-icon {
+    width: 60px;
+    min-height: 80px;
+    padding: var(--win11-spacing-1);
+  }
+  
+  .desktop-icon-image {
+    width: 40px;
+    height: 40px;
+    padding: var(--win11-spacing-1);
+  }
+  
+  .desktop-icon-title {
+    font-size: 9px;
+    padding: 2px var(--win11-spacing-1);
+  }
+}
+
+/* Small Tablet: 480px - 768px */
+@media (min-width: 480px) and (max-width: 767px) {
+  .desktop-icon {
+    width: 70px;
+    min-height: 88px;
+    padding: var(--win11-spacing-2);
+  }
+  
+  .desktop-icon-image {
+    width: 44px;
+    height: 44px;
+    padding: var(--win11-spacing-2);
+  }
+  
+  .desktop-icon-title {
+    font-size: 10px;
+    padding: 2px var(--win11-spacing-1);
+  }
+}
+
+/* Tablet: 768px - 1024px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .desktop-icon {
+    width: 75px;
+    min-height: 92px;
+    padding: var(--win11-spacing-2);
+  }
+  
+  .desktop-icon-image {
+    width: 46px;
+    height: 46px;
+    padding: var(--win11-spacing-2);
+  }
+  
+  .desktop-icon-title {
+    font-size: 11px;
+    padding: var(--win11-spacing-1) var(--win11-spacing-2);
+  }
+}
+
+/* Desktop: 1024px - 1440px - Default sizes apply */
+
+/* Large Desktop: > 1440px */
+@media (min-width: 1440px) {
+  .desktop-icon {
+    width: 90px;
+    min-height: 104px;
+  }
+  
+  .desktop-icon-image {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .desktop-icon-title {
+    font-size: 12px;
+  }
+}
+

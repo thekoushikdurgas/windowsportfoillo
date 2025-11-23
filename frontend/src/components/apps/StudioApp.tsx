@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { WindowProps } from '@/types';
 import { generateImage, editImage, generateVideo } from '@/services/geminiService';
-import { Image as ImageIcon, Video, Wand2, Download, Upload, Loader2 } from 'lucide-react';
+import { Image as ImageIcon, Video, Wand2, Download, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils/cn';
 
 const StudioApp: React.FC<WindowProps> = () => {
   const [activeTab, setActiveTab] = useState<'generate' | 'edit' | 'video'>('generate');
@@ -13,11 +14,12 @@ const StudioApp: React.FC<WindowProps> = () => {
   
   const [aspectRatio, setAspectRatio] = useState('1:1');
   const [isHQ, setIsHQ] = useState(false);
-  const [editImageFile, setEditImageFile] = useState<File | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_editImageFile, setEditImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [videoRefImage, setVideoRefImage] = useState<File | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: any, previewSetter?: any) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: (file: File | null) => void, previewSetter?: (url: string | null) => void) => {
     const file = e.target.files?.[0];
     if (file) {
       setter(file);
@@ -65,48 +67,49 @@ const StudioApp: React.FC<WindowProps> = () => {
   };
 
   return (
-    <div className="flex h-full bg-[#1f1f1f] text-white">
-      <div className="w-16 bg-[#2d2d2d] flex flex-col items-center py-4 space-y-6 border-r border-black/20">
-        <button onClick={() => setActiveTab('generate')} className={`p-3 rounded-xl transition ${activeTab === 'generate' ? 'bg-blue-600' : 'hover:bg-white/10'}`}>
+    <div className="studio-container">
+      <div className="studio-sidebar">
+        <button onClick={() => setActiveTab('generate')} className={cn('studio-sidebar-button', activeTab === 'generate' && 'studio-sidebar-button-active')}>
           <ImageIcon size={24} />
         </button>
-        <button onClick={() => setActiveTab('edit')} className={`p-3 rounded-xl transition ${activeTab === 'edit' ? 'bg-blue-600' : 'hover:bg-white/10'}`}>
+        <button onClick={() => setActiveTab('edit')} className={cn('studio-sidebar-button', activeTab === 'edit' && 'studio-sidebar-button-active')}>
           <Wand2 size={24} />
         </button>
-        <button onClick={() => setActiveTab('video')} className={`p-3 rounded-xl transition ${activeTab === 'video' ? 'bg-blue-600' : 'hover:bg-white/10'}`}>
+        <button onClick={() => setActiveTab('video')} className={cn('studio-sidebar-button', activeTab === 'video' && 'studio-sidebar-button-active')}>
           <Video size={24} />
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-4">
+      <div className="studio-content">
+        <div className="studio-controls">
+          <h1 className="studio-title">
             {activeTab === 'generate' ? 'Generate Image' : activeTab === 'edit' ? 'Edit Image' : 'Generate Video'}
           </h1>
           
           {activeTab === 'edit' && (
-            <div className="mb-4">
-              <label className="block mb-2">Upload Image</label>
+            <div className="studio-upload-section">
+              <label className="studio-label">Upload Image</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => handleFileChange(e, setEditImageFile, setPreviewUrl)}
-                className="block w-full text-sm text-gray-300"
+                className="studio-file-input"
               />
               {previewUrl && (
-                <img src={previewUrl} alt="Preview" className="mt-2 max-w-xs rounded" />
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={previewUrl} alt="Preview" className="studio-preview-image" />
               )}
             </div>
           )}
 
           {activeTab === 'video' && (
-            <div className="mb-4">
-              <label className="block mb-2">Reference Image (Optional)</label>
+            <div className="studio-upload-section">
+              <label className="studio-label">Reference Image (Optional)</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => handleFileChange(e, setVideoRefImage)}
-                className="block w-full text-sm text-gray-300"
+                className="studio-file-input"
               />
             </div>
           )}
@@ -115,14 +118,14 @@ const StudioApp: React.FC<WindowProps> = () => {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Describe what you want to generate..."
-            className="w-full h-32 p-4 bg-[#2d2d2d] border border-gray-600 rounded-lg text-white placeholder-gray-400 resize-none"
+            className="studio-textarea"
           />
 
-          <div className="mt-4 flex gap-4 items-center">
+          <div className="studio-options">
             <select
               value={aspectRatio}
               onChange={(e) => setAspectRatio(e.target.value)}
-              className="px-4 py-2 bg-[#2d2d2d] border border-gray-600 rounded text-white"
+              className="studio-select"
             >
               <option value="1:1">1:1</option>
               <option value="16:9">16:9</option>
@@ -131,12 +134,12 @@ const StudioApp: React.FC<WindowProps> = () => {
             </select>
             
             {activeTab === 'generate' && (
-              <label className="flex items-center gap-2">
+              <label className="studio-checkbox-label">
                 <input
                   type="checkbox"
                   checked={isHQ}
                   onChange={(e) => setIsHQ(e.target.checked)}
-                  className="rounded"
+                  className="studio-checkbox"
                 />
                 <span>High Quality</span>
               </label>
@@ -145,7 +148,7 @@ const StudioApp: React.FC<WindowProps> = () => {
             <button
               onClick={handleAction}
               disabled={isLoading || !prompt}
-              className="ml-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="studio-generate-button"
             >
               {isLoading ? <Loader2 size={20} className="animate-spin" /> : 'Generate'}
             </button>
@@ -153,16 +156,17 @@ const StudioApp: React.FC<WindowProps> = () => {
         </div>
 
         {resultUrl && (
-          <div className="flex-1 flex items-center justify-center bg-[#2d2d2d] rounded-lg p-4">
+          <div className="studio-result">
             {activeTab === 'video' ? (
-              <video src={resultUrl} controls className="max-w-full max-h-full rounded" />
+              <video src={resultUrl} controls className="studio-result-video" />
             ) : (
-              <div className="relative">
-                <img src={resultUrl} alt="Generated" className="max-w-full max-h-[600px] rounded" />
+              <div className="studio-result-image-wrapper">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={resultUrl} alt="Generated" className="studio-result-image" />
                 <a
                   href={resultUrl}
                   download
-                  className="absolute top-4 right-4 p-2 bg-blue-600 rounded-lg hover:bg-blue-700"
+                  className="studio-download-button"
                 >
                   <Download size={20} />
                 </a>

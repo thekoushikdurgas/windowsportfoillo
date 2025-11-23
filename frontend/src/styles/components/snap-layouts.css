@@ -1,0 +1,76 @@
+/**
+ * Snap Layouts Component Styles
+ * Styles for the Snap Layouts component
+ */
+
+/* ============================================
+   SNAP LAYOUTS
+   ============================================ */
+
+.snap-layouts-zone {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  animation: win11-snap-indicator 1.5s var(--win11-easing-spring) infinite;
+  border-radius: var(--win11-radius-lg);
+  box-shadow: 0 0 24px rgba(0, 120, 212, 0.4);
+}
+
+.snap-layouts-preview {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--win11-spacing-2);
+  z-index: 10000;
+  padding: var(--win11-spacing-2);
+  border-radius: var(--win11-radius-panel);
+  box-shadow: var(--win11-elevation-24);
+  border: 1px solid var(--win11-border);
+  background-color: var(--win11-surface);
+  -webkit-backdrop-filter: blur(32px) saturate(1.2);
+  backdrop-filter: blur(32px) saturate(1.2);
+  animation: win11-slide-in-down var(--win11-animation-normal) var(--win11-easing);
+}
+
+[data-theme='dark'] .snap-layouts-preview {
+  background-color: rgba(45, 45, 45, 0.95);
+  border-color: var(--win11-border);
+}
+
+[data-theme='dark'] .snap-layouts-preview {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(32, 32, 32, 0.95);
+}
+
+.snap-layouts-preview-button {
+  padding: 12px;
+  border-radius: 6px;
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: transparent;
+  border: 1px solid;
+  cursor: pointer;
+}
+
+.snap-layouts-preview-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.snap-layouts-preview-button:active {
+  transform: scale(0.95);
+}
+
+.snap-layouts-preview-icon {
+  font-size: 24px;
+}
+
+.snap-layouts-preview-label {
+  font-size: 11px;
+  color: white;
+}
+

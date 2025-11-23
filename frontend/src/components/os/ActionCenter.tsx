@@ -3,14 +3,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { useNotification } from '@/context/NotificationContext';
-import { Acrylic } from '@/components/ui/Acrylic';
 import { cn } from '@/lib/utils/cn';
 import {
   Wifi, Bluetooth, Plane, Battery, Moon, Sun, Monitor,
-  Volume2, Brightness, Settings, ChevronUp, ChevronDown,
-  X, Calendar, Bell
+  Volume2, ChevronUp, ChevronDown,
+  X
 } from 'lucide-react';
-import { BORDER_RADIUS } from '@/lib/windows11';
 
 interface ActionCenterProps {
   isOpen: boolean;
@@ -39,29 +37,20 @@ export const ActionCenter: React.FC<ActionCenterProps> = ({ isOpen, onClose }) =
   const [volume, setVolume] = useState(85);
   const [brightness, setBrightness] = useState(100);
 
-  const panelBg = isDarkMode 
-    ? (transparencyEffect ? 'bg-[#202020]/95 backdrop-blur-xl' : 'bg-[#202020]') 
-    : (transparencyEffect ? 'bg-[#f3f3f3]/95 backdrop-blur-xl' : 'bg-[#f3f3f3]');
-    
-  const hoverBg = isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5';
-  const activeBg = isDarkMode ? 'bg-white/10' : 'bg-black/5';
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const mutedText = isDarkMode ? 'text-gray-400' : 'text-gray-500';
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
+  const year = time.getFullYear();
+  const month = time.getMonth();
   const { daysInMonth, firstDayOfMonth } = useMemo(() => {
-    const year = time.getFullYear();
-    const month = time.getMonth();
     return {
       daysInMonth: new Date(year, month + 1, 0).getDate(),
       firstDayOfMonth: new Date(year, month, 1).getDay()
     };
-  }, [time.getFullYear(), time.getMonth()]);
+  }, [year, month]);
 
   const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
@@ -78,14 +67,11 @@ export const ActionCenter: React.FC<ActionCenterProps> = ({ isOpen, onClose }) =
   }) => (
     <button 
       onClick={(e) => { e.stopPropagation(); onClick(); }} 
-      className={cn(
-        'flex flex-col items-center gap-2 w-full p-3 rounded-lg transition',
-        active ? `bg-${accentColor.tailwind} text-white` : hoverBg,
-        textColor
-      )}
+      className={cn('action-center-toggle-button', active && 'action-center-toggle-button-active')}
+      style={active ? { backgroundColor: accentColor.hex, color: 'white' } : undefined}
     >
-      <div className="text-2xl">{icon}</div>
-      <span className="text-[11px] truncate w-full text-center">{label}</span>
+      <div className="action-center-toggle-icon">{icon}</div>
+      <span className="action-center-toggle-label">{label}</span>
     </button>
   );
 
@@ -98,30 +84,24 @@ export const ActionCenter: React.FC<ActionCenterProps> = ({ isOpen, onClose }) =
     value: number; 
     onChange: (val: number) => void;
   }) => (
-    <div className="flex items-center gap-3 h-8">
-      <div className={mutedText}>{icon}</div>
-      <div className={cn(
-        'flex-1 h-1 rounded-full relative group cursor-pointer',
-        isDarkMode ? 'bg-gray-600' : 'bg-gray-300'
-      )}>
+    <div className="action-center-slider-container">
+      <div className="action-center-slider-icon">{icon}</div>
+      <div className="action-center-slider-track" data-theme={isDarkMode ? 'dark' : 'light'}>
         <input 
           type="range" 
           min="0" 
           max="100" 
           value={value} 
           onChange={(e) => onChange(parseInt(e.target.value))}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+          className="action-center-slider-input"
           onClick={(e) => e.stopPropagation()}
         />
         <div 
-          className={cn(
-            'absolute top-0 left-0 h-full rounded-full',
-            `bg-${accentColor.tailwind}`
-          )} 
-          style={{ width: `${value}%` }}
+          className="action-center-slider-fill"
+          style={{ width: `${value}%`, backgroundColor: accentColor.hex }}
         ></div>
       </div>
-      <span className={cn('text-xs w-10 text-right', mutedText)}>{value}%</span>
+      <span className="action-center-slider-value">{value}%</span>
     </div>
   );
 
@@ -129,41 +109,32 @@ export const ActionCenter: React.FC<ActionCenterProps> = ({ isOpen, onClose }) =
 
   return (
     <div
-      className={cn(
-        'fixed top-0 right-0 h-full w-[420px] z-[3000]',
-        'win11-transition',
-        panelBg,
-        'border-l shadow-2xl',
-        borderColor,
-        isOpen ? 'translate-x-0' : 'translate-x-full'
-      )}
+      className={cn('action-center-container', 'win11-transition')}
+      data-open={isOpen}
+      data-transparency={transparencyEffect}
+      data-theme={isDarkMode ? 'dark' : 'light'}
       style={{
         animation: isOpen ? 'win11-menu-slide-right 200ms cubic-bezier(0.1, 0.9, 0.2, 1)' : undefined,
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="h-full flex flex-col overflow-hidden">
+      <div className="action-center-inner">
         {/* Header */}
-        <div className={cn(
-          'flex items-center justify-between p-4 border-b shrink-0',
-          borderColor
-        )}>
-          <h2 className={cn('text-lg font-semibold', textColor)}>Quick settings</h2>
+        <div className="action-center-header">
+          <h2 className="action-center-header-title">Quick settings</h2>
           <button
             onClick={onClose}
-            className={cn(
-              'p-2 rounded-lg transition',
-              hoverBg,
-              textColor
-            )}
+            className="action-center-header-close"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Quick Actions */}
-        <div className="p-4 border-b" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }}>
-          <div className="grid grid-cols-4 gap-3 mb-4">
+        <div className="action-center-content">
+          <div className="action-center-quick-actions">
+            <div className="action-center-quick-actions-title">Quick actions</div>
+            <div className="action-center-quick-actions-grid">
             <ToggleButton 
               active={toggles.wifi} 
               icon={<Wifi size={24} />} 
@@ -202,54 +173,52 @@ export const ActionCenter: React.FC<ActionCenterProps> = ({ isOpen, onClose }) =
             />
           </div>
 
-          <div className="space-y-3">
+          <div className="action-center-slider" style={{ marginTop: '12px' }}>
             <Slider icon={<Sun size={20}/>} value={brightness} onChange={setBrightness} />
+          </div>
+          <div className="action-center-slider">
             <Slider icon={<Volume2 size={20}/>} value={volume} onChange={setVolume} />
+          </div>
           </div>
         </div>
 
         {/* Notifications */}
-        <div className="flex-1 overflow-y-auto win11-scrollbar">
-          <div className="p-4">
-            <div className={cn('flex items-center justify-between mb-3', textColor)}>
-              <h3 className="text-sm font-semibold">Notifications</h3>
-              <button className={cn('text-xs', mutedText, hoverBg, 'px-2 py-1 rounded')}>
+        <div className="action-center-content win11-scrollbar" style={{ flex: '1 1 0%', overflowY: 'auto' }}>
+          <div className="action-center-notifications-section">
+            <div className="action-center-notifications-header">
+              <h3 className="action-center-notifications-title">Notifications</h3>
+              <button className="action-center-notifications-clear-button">
                 Clear all
               </button>
             </div>
-            <div className="space-y-2">
+            <div className="action-center-notifications-list">
               {notifications.length > 0 ? (
                 notifications.slice(0, 10).map((notif) => (
                   <div
                     key={notif.id}
-                    className={cn(
-                      'p-3 rounded-lg border transition',
-                      hoverBg,
-                      borderColor
-                    )}
+                    className="action-center-notification-item"
+                    data-theme={isDarkMode ? 'dark' : 'light'}
                   >
-                    <div className="flex items-start gap-3">
-                      {notif.icon && (
-                        <div className="mt-0.5">{notif.icon}</div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className={cn('text-sm font-medium mb-1', textColor)}>
-                          {notif.title}
-                        </div>
-                        <div className={cn('text-xs', mutedText)}>
-                          {notif.message}
-                        </div>
-                        {notif.appName && (
-                          <div className={cn('text-[10px] mt-1', mutedText)}>
-                            {notif.appName}
-                          </div>
-                        )}
+                    {notif.icon && (
+                      <div className="action-center-notification-icon">{notif.icon}</div>
+                    )}
+                    <div className="action-center-notification-content">
+                      <div className="action-center-notification-title">
+                        {notif.title}
                       </div>
+                      <div className="action-center-notification-message">
+                        {notif.message}
+                      </div>
+                      {notif.appName && (
+                        <div className="action-center-notification-time">
+                          {notif.appName}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))
               ) : (
-                <div className={cn('text-center py-8 text-sm', mutedText)}>
+                <div className="action-center-no-notifications">
                   No notifications
                 </div>
               )}
@@ -258,70 +227,53 @@ export const ActionCenter: React.FC<ActionCenterProps> = ({ isOpen, onClose }) =
         </div>
 
         {/* Calendar Widget */}
-        <div className={cn(
-          'p-4 border-t shrink-0',
-          borderColor
-        )}>
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <div className={cn('text-2xl font-semibold', textColor)}>
-                {time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-              </div>
-              <div className={cn('text-sm', mutedText)}>
-                {time.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
-              </div>
+        <div className="action-center-footer">
+          <div className="action-center-footer-time-section">
+            <div className="action-center-footer-date">
+              {time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
             </div>
-            <button
-              onClick={() => setCalendarOpen(!calendarOpen)}
-              className={cn(
-                'p-2 rounded-lg transition',
-                hoverBg,
-                textColor
-              )}
-            >
-              {calendarOpen ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-            </button>
+            <div className="action-center-footer-day">
+              {time.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
+            </div>
           </div>
+          <button
+            onClick={() => setCalendarOpen(!calendarOpen)}
+            className="action-center-footer-button"
+          >
+            {calendarOpen ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+          </button>
+        </div>
 
-          {calendarOpen && (
-            <div className={cn(
-              'mt-3 p-3 rounded-lg border',
-              borderColor,
-              isDarkMode ? 'bg-black/20' : 'bg-white/50'
-            )}>
-              <div className="grid grid-cols-7 gap-1 mb-2">
-                {weekDays.map(day => (
-                  <div key={day} className={cn('text-center text-xs font-medium py-1', mutedText)}>
+        {calendarOpen && (
+          <div className="action-center-calendar-panel" data-theme={isDarkMode ? 'dark' : 'light'}>
+            <div className="action-center-calendar-grid-header">
+              {weekDays.map(day => (
+                <div key={day} className="action-center-calendar-weekday">
+                  {day}
+                </div>
+              ))}
+            </div>
+            <div className="action-center-calendar-grid">
+              {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                <div key={`empty-${i}`} className="action-center-calendar-day action-center-calendar-day-empty"></div>
+              ))}
+              {Array.from({ length: daysInMonth }).map((_, i) => {
+                const day = i + 1;
+                const isToday = day === time.getDate();
+                return (
+                  <div
+                    key={day}
+                    className="action-center-calendar-day"
+                    data-current-day={isToday}
+                    style={isToday ? { backgroundColor: accentColor.hex, color: 'white' } : undefined}
+                  >
                     {day}
                   </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                  <div key={`empty-${i}`} className="aspect-square"></div>
-                ))}
-                {Array.from({ length: daysInMonth }).map((_, i) => {
-                  const day = i + 1;
-                  const isToday = day === time.getDate();
-                  return (
-                    <div
-                      key={day}
-                      className={cn(
-                        'aspect-square flex items-center justify-center text-xs rounded transition',
-                        isToday 
-                          ? `bg-${accentColor.tailwind} text-white font-semibold`
-                          : hoverBg,
-                        textColor
-                      )}
-                    >
-                      {day}
-                    </div>
-                  );
-                })}
-              </div>
+                );
+              })}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

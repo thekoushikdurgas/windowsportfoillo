@@ -34,11 +34,22 @@ export interface WindowProps {
   isActive: boolean;
 }
 
+export interface GroundingChunk {
+  web?: {
+    uri?: string;
+    title?: string;
+  };
+}
+
+export interface GroundingMetadata {
+  groundingChunks?: GroundingChunk[];
+}
+
 export interface ChatMessage {
   role: 'user' | 'model' | 'system';
   text: string;
   timestamp: number;
-  groundingMetadata?: any;
+  groundingMetadata?: GroundingMetadata;
   thinking?: boolean;
 }
 

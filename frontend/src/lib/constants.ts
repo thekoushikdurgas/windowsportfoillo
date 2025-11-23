@@ -1,21 +1,18 @@
 export const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
 
-export const WALLPAPER_URL = "https://images.unsplash.com/photo-1633205719979-e47958b730a5?q=80&w=2832&auto=format&fit=crop";
+// Import wallpapers from dedicated utility file
+export { WALLPAPERS, DEFAULT_WALLPAPER, getWallpaperById, getWallpapersByCategory, getWallpaperUrl } from './wallpapers';
 
-export const WALLPAPERS = [
-  { id: 'dark-abstract', url: 'https://images.unsplash.com/photo-1633205719979-e47958b730a5?q=80&w=2832&auto=format&fit=crop', name: 'Abstract Dark' },
-  { id: 'light-abstract', url: 'https://images.unsplash.com/photo-1633205719932-d1286395e54d?q=80&w=2832&auto=format&fit=crop', name: 'Abstract Light' },
-  { id: 'nature-mountain', url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=3000&auto=format&fit=crop', name: 'Mountains' },
-  { id: 'nature-lake', url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=3000&auto=format&fit=crop', name: 'Lake' },
-  { id: 'neon-city', url: 'https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=3000&auto=format&fit=crop', name: 'Neon City' },
-];
+// Deprecated: Use WALLPAPERS from wallpapers.ts instead
+// Kept for backward compatibility
+export const WALLPAPER_URL = '/wallpapers/wallpaper (1).jpg';
 
 export const ACCENT_COLORS = [
+  { id: 'orange', name: 'Durgas Orange', hex: '#ea580c', tailwind: 'orange-600' }, // Default brand color
   { id: 'blue', name: 'Sapphire Blue', hex: '#2563eb', tailwind: 'blue-600' },
   { id: 'purple', name: 'Neon Purple', hex: '#9333ea', tailwind: 'purple-600' },
   { id: 'green', name: 'Emerald', hex: '#059669', tailwind: 'green-600' },
   { id: 'red', name: 'Crimson', hex: '#dc2626', tailwind: 'red-600' },
-  { id: 'orange', name: 'Sunset', hex: '#ea580c', tailwind: 'orange-600' },
   { id: 'pink', name: 'Rose', hex: '#db2777', tailwind: 'pink-600' },
 ];
 

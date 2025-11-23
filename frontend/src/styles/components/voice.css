@@ -1,0 +1,152 @@
+/**
+ * Voice App Styles
+ * Styles for the Voice application
+ */
+
+/* ============================================
+   VOICE APP
+   ============================================ */
+
+.voice-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+  font-family: var(--win11-font-family-base);
+  align-items: center;
+  justify-content: center;
+  padding: var(--win11-spacing-8);
+}
+
+[data-theme='dark'] .voice-container {
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+}
+
+.voice-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.voice-status-indicator {
+  width: 128px;
+  height: 128px;
+  min-width: 128px;
+  min-height: 128px;
+  border-radius: var(--win11-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  background-color: var(--win11-surface-elevated);
+  border: 4px solid var(--win11-border);
+  box-shadow: var(--win11-elevation-8);
+  cursor: pointer;
+  outline: none;
+}
+
+.voice-status-indicator:hover {
+  transform: scale(1.05);
+  box-shadow: var(--win11-elevation-12);
+}
+
+.voice-status-indicator:focus-visible {
+  outline: 2px solid var(--win11-accent);
+  outline-offset: 4px;
+}
+
+.voice-status-indicator-active {
+  background-color: var(--win11-success);
+  border-color: var(--win11-success);
+  animation: win11-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 24px rgba(16, 124, 16, 0.4);
+}
+
+@media (max-width: 768px) {
+  .voice-status-indicator {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    min-height: 100px;
+  }
+}
+
+.voice-status-indicator-muted {
+  background-color: #eab308;
+}
+
+.voice-status-indicator-disconnected {
+  background-color: #4b5563;
+}
+
+.voice-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.voice-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.voice-status-text {
+  color: #9ca3af;
+}
+
+.voice-controls {
+  display: flex;
+  gap: 16px;
+}
+
+.voice-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.voice-button:hover {
+  background-color: #1d4ed8;
+}
+
+.voice-button-connect {
+  background-color: #2563eb;
+}
+
+.voice-button-connect:hover {
+  background-color: #1d4ed8;
+}
+
+.voice-button-mute {
+  background-color: #ca8a04;
+}
+
+.voice-button-mute:hover {
+  background-color: #a16207;
+}
+
+.voice-button-unmute {
+  background-color: #16a34a;
+}
+
+.voice-button-unmute:hover {
+  background-color: #15803d;
+}
+
+.voice-button-disconnect {
+  background-color: #dc2626;
+}
+
+.voice-button-disconnect:hover {
+  background-color: #b91c1c;
+}
+

@@ -1,0 +1,211 @@
+/**
+ * Store App Styles
+ * Styles for the Store application
+ */
+
+/* ============================================
+   STORE APP
+   ============================================ */
+
+.store-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+  font-family: var(--win11-font-family-base);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .store-container {
+  background-color: var(--win11-surface);
+  color: var(--win11-text);
+}
+
+.store-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  border-bottom: 1px solid;
+  flex-shrink: 0;
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb;
+}
+
+[data-theme='dark'] .store-header {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: #2d2d2d;
+}
+
+.store-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--win11-text);
+}
+
+.store-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .store-search {
+  background-color: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.store-search-input {
+  background-color: transparent;
+  outline: none;
+  font-size: 12px;
+  color: var(--win11-text);
+}
+
+.store-search-input::placeholder {
+  color: #6b7280;
+}
+
+.store-content {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--win11-spacing-4);
+}
+
+.store-app-card {
+  padding: var(--win11-spacing-4);
+  border-radius: var(--win11-radius-card);
+  border: 1px solid var(--win11-border);
+  transition: all var(--win11-animation-normal) var(--win11-easing);
+  background-color: var(--win11-surface);
+  box-shadow: var(--win11-elevation-2);
+  cursor: pointer;
+  outline: none;
+}
+
+[data-theme='dark'] .store-app-card {
+  border-color: var(--win11-border);
+  background-color: var(--win11-surface);
+}
+
+.store-app-card:hover {
+  background-color: var(--win11-surface-hover);
+  border-color: var(--win11-border-strong);
+  transform: translateY(-4px);
+  box-shadow: var(--win11-elevation-8);
+}
+
+.store-app-card:focus-visible {
+  outline: 2px solid var(--win11-accent);
+  outline-offset: 2px;
+}
+
+.store-app-card:active {
+  transform: translateY(-2px);
+  transition-duration: var(--win11-animation-fast);
+}
+
+@media (max-width: 768px) {
+  .store-grid {
+    grid-template-columns: 1fr;
+    gap: var(--win11-spacing-3);
+  }
+}
+
+[data-theme='dark'] .store-app-card:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.store-app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.store-app-icon {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(243, 244, 246, 1);
+}
+
+[data-theme='dark'] .store-app-icon {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(243, 244, 246, 1);
+}
+
+.store-app-info {
+  flex: 1 1 0%;
+}
+
+.store-app-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--win11-text);
+}
+
+.store-app-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.store-app-rating-star {
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+.store-app-rating-value {
+  font-size: 11px;
+  color: var(--win11-text-secondary);
+}
+
+.store-app-description {
+  font-size: 12px;
+  margin-bottom: 12px;
+  color: var(--win11-text-secondary);
+}
+
+.store-app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.store-app-category {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.store-app-install-button {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--win11-animation-fast) var(--win11-easing);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.store-app-install-button:hover {
+  background-color: #1d4ed8;
+}
+

@@ -15,14 +15,10 @@ interface App {
   category: string;
 }
 
-const StoreApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
+const StoreApp: React.FC<WindowProps> = () => {
   const { isDarkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const textColor = isDarkMode ? 'text-white' : 'text-black';
-  const bgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white';
-  const borderColor = isDarkMode ? 'border-white/10' : 'border-black/10';
-  const hoverBg = isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5';
 
   const apps: App[] = [
     {
@@ -57,77 +53,49 @@ const StoreApp: React.FC<WindowProps> = ({ windowId, isActive }) => {
   );
 
   return (
-    <div className={cn('h-full flex flex-col', bgColor, textColor)}>
+    <div className={cn('store-container')} data-theme={isDarkMode ? 'dark' : 'light'}>
       {/* Header */}
-      <div className={cn(
-        'h-16 flex items-center gap-4 px-6 border-b shrink-0',
-        borderColor,
-        isDarkMode ? 'bg-[#2d2d2d]' : 'bg-gray-50'
-      )}>
+      <div className="store-header" data-theme={isDarkMode ? 'dark' : 'light'}>
         <Store size={24} />
-        <h1 className="text-xl font-semibold">App Store</h1>
+        <h1 className="store-title">App Store</h1>
         <div className="flex-1"></div>
-        <div className={cn(
-          'flex items-center gap-2 px-4 py-2 rounded-lg',
-          isDarkMode ? 'bg-[#1a1a1a] border border-white/10' : 'bg-white border border-black/10'
-        )}>
-          <Search size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+        <div className="store-search" data-theme={isDarkMode ? 'dark' : 'light'}>
+          <Search size={18} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search apps..."
-            className={cn(
-              'bg-transparent outline-none text-sm',
-              textColor,
-              'placeholder:text-gray-500'
-            )}
+            className="store-search-input"
           />
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-6 win11-scrollbar">
-        <div className="grid grid-cols-3 gap-4">
+      <div className="store-content win11-scrollbar">
+        <div className="store-grid">
           {filteredApps.map((app) => (
             <div
               key={app.id}
-              className={cn(
-                'p-4 rounded-lg border transition',
-                borderColor,
-                hoverBg,
-                isDarkMode ? 'bg-[#2d2d2d]' : 'bg-gray-50'
-              )}
+              className="store-app-card"
+              data-theme={isDarkMode ? 'dark' : 'light'}
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className={cn(
-                  'p-3 rounded-lg',
-                  isDarkMode ? 'bg-white/10' : 'bg-white border border-gray-200'
-                )}>
+              <div className="store-app-header">
+                <div className="store-app-icon" data-theme={isDarkMode ? 'dark' : 'light'}>
                   {app.icon}
                 </div>
-                <div className="flex-1">
-                  <h3 className={cn('font-semibold mb-1', textColor)}>{app.name}</h3>
-                  <div className="flex items-center gap-1">
-                    <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                    <span className={cn('text-xs', isDarkMode ? 'text-gray-400' : 'text-gray-600')}>
-                      {app.rating}
-                    </span>
+                <div className="store-app-info">
+                  <h3 className="store-app-name">{app.name}</h3>
+                  <div className="store-app-rating">
+                    <Star size={14} className="store-app-rating-star" />
+                    <span className="store-app-rating-value">{app.rating}</span>
                   </div>
                 </div>
               </div>
-              <p className={cn('text-sm mb-3', isDarkMode ? 'text-gray-400' : 'text-gray-600')}>
-                {app.description}
-              </p>
-              <div className="flex items-center justify-between">
-                <span className={cn('text-xs', isDarkMode ? 'text-gray-500' : 'text-gray-500')}>
-                  {app.category}
-                </span>
-                <button className={cn(
-                  'px-4 py-1.5 rounded-lg text-sm font-medium transition',
-                  'bg-blue-600 hover:bg-blue-700 text-white',
-                  'flex items-center gap-2'
-                )}>
+              <p className="store-app-description">{app.description}</p>
+              <div className="store-app-footer">
+                <span className="store-app-category">{app.category}</span>
+                <button className="store-app-install-button">
                   <Download size={14} />
                   Install
                 </button>
