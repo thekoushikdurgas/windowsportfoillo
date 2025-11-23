@@ -21,6 +21,8 @@ export interface Translations {
   education: string;
   certifications: string;
   current: string;
+  issuedDate: string;
+  expiryDate: string;
 
   // Skills
   technicalSkills: string;
@@ -76,6 +78,8 @@ export const translations: Record<Language, Translations> = {
     education: 'Education',
     certifications: 'Certifications',
     current: 'Current',
+    issuedDate: 'Issued',
+    expiryDate: 'Expires',
 
     // Skills
     technicalSkills: 'Technical Skills',
@@ -130,6 +134,8 @@ export const translations: Record<Language, Translations> = {
     education: 'শিক্ষা',
     certifications: 'সার্টিফিকেশন',
     current: 'বর্তমান',
+    issuedDate: 'জারি করা হয়েছে',
+    expiryDate: 'মেয়াদ শেষ',
 
     // Skills
     technicalSkills: 'প্রযুক্তিগত দক্ষতা',
@@ -185,6 +191,8 @@ export const translations: Record<Language, Translations> = {
     education: 'शिक्षा',
     certifications: 'प्रमाणपत्र',
     current: 'वर्तमान',
+    issuedDate: 'जारी किया गया',
+    expiryDate: 'समाप्ति',
 
     // Skills
     technicalSkills: 'तकनीकी कौशल',

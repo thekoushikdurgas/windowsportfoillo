@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { AppDefinition, WindowState } from '@/types';
 import Taskbar from './Taskbar';
 import Window from './Window';
-import { MessageSquare, Image as ImageIcon, Mic, Terminal, Settings as SettingsIcon, Folder, Bell, Calculator, FileText, Store, Cloud } from 'lucide-react';
+import { MessageSquare, Image as ImageIcon, Mic, Terminal, Settings as SettingsIcon, Folder, Bell, Calculator, FileText, Store, Cloud, UserCircle } from 'lucide-react';
 import ChatApp from '../apps/ChatApp';
 import StudioApp from '../apps/StudioApp';
 import VoiceApp from '../apps/VoiceApp';
@@ -15,6 +15,7 @@ import NotepadApp from '../apps/NotepadApp';
 import TerminalApp from '../apps/TerminalApp';
 import StoreApp from '../apps/StoreApp';
 import WeatherApp from '../apps/WeatherApp';
+import AboutMe from '../apps/AboutMe';
 import { useTheme } from '@/context/ThemeContext';
 import { useNotification } from '@/context/NotificationContext';
 import NotificationContainer from './NotificationContainer';
@@ -103,6 +104,14 @@ const APPS: AppDefinition[] = [
     title: 'Weather',
     icon: <Cloud className="text-blue-400" />,
     component: WeatherApp,
+    defaultWidth: 500,
+    defaultHeight: 600
+  },
+  {
+    id: 'aboutme',
+    title: 'About Me',
+    icon: <UserCircle className="text-indigo-400" />,
+    component: AboutMe,
     defaultWidth: 500,
     defaultHeight: 600
   }

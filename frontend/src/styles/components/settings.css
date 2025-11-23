@@ -457,6 +457,12 @@
   box-shadow: 0 0 0 2px rgba(var(--win11-accent-rgb), 0.5);
 }
 
+.settings-wallpaper-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .settings-wallpaper-image {
   width: 100%;
   height: 100%;

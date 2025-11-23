@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { WindowProps } from '@/types';
 import { useTheme } from '@/context/ThemeContext';
 import { WALLPAPERS, ACCENT_COLORS } from '@/lib/constants';
@@ -153,8 +154,16 @@ const SettingsApp: React.FC<WindowProps> = () => {
                     className={cn('settings-wallpaper-button', wallpaperUrl === wp.url && 'settings-wallpaper-button-active')}
                     style={wallpaperUrl === wp.url ? { borderColor: accentColor.hex, boxShadow: `0 0 0 2px ${accentColor.hex}50` } : undefined}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={wp.url} alt={wp.name} className="settings-wallpaper-image" />
+                    <div className="settings-wallpaper-image-wrapper">
+                      <Image 
+                        src={wp.url} 
+                        alt={wp.name} 
+                        className="settings-wallpaper-image"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </div>
                     <div className="settings-wallpaper-label">
                       {wp.name}
                     </div>
